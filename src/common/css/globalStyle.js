@@ -26,6 +26,7 @@ const Globalstyle = createGlobalStyle`
     button {
         border: none;
         outline: none;
+        line-height: 0;
         cursor: pointer;
     }
 

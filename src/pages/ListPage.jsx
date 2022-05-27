@@ -1,155 +1,78 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
-
-import { MdMenu, MdSearch } from "react-icons/md";
+import { MdMenu, MdSearch, MdKeyboardArrowDown } from "react-icons/md";
 import { BiFolder } from "react-icons/bi";
 import { ReactComponent as LarnIcon } from "../assets/larn-icon-black-resize.svg";
 import CardList from "../components/CardList";
 import CardItem from "../components/CardItem";
+import AddButton from "../components/AddButton";
+import EditPannel from "../components/EditPannel";
+import AddPannel from "../components/AddPannel";
+import GroupPannel from "../components/GroupPannel";
 
-const getLevel = (level) => {
-  switch (level) {
-    case "어려워요":
-      return "애매해요";
-    case "애매해요":
-      return "외웠어요";
-    case "외웠어요":
-      return "어려워요";
+const ListPage = ({
+  cards,
+  groups,
+  onCreateCard,
+  onRemoveCard,
+  onEditCard,
+  onChangeLevel,
+}) => {
+  const [selectedCard, setSelectedCard] = useState(null);
 
-    default:
-      break;
-  }
-};
+  const [selectedGroups, setSelectedGroups] = useState("모든 그룹");
 
-const ListPage = (props) => {
-  const [cards, setCards] = useState({});
+  const [showEdit, setShowEdit] = useState(false);
+  const [showAdd, setShowAdd] = useState(false);
+  const [showGroup, setShowGroup] = useState(false);
 
-  useEffect(() => {
-    const initialState = {
-      1: {
-        id: 1,
-        user_id: 100,
-        word: "apple",
-        mean: "사과",
-        memo: null,
-        group_name: "",
-        level: "어려워요",
-        create_at: Date.now(),
-      },
-      2: {
-        id: 2,
-        user_id: 100,
-        word: "banana",
-        mean: "바나나",
-        memo: null,
-        group_name: "그룹1",
-        level: "애매해요",
-        create_at: Date.now(),
-      },
-      3: {
-        id: 3,
-        user_id: 100,
-        word: "tomato",
-        mean: "토마토",
-        memo: "토뭬이",
-        group_name: "",
-        level: "외웠어요",
-        create_at: Date.now(),
-      },
-      4: {
-        id: 4,
-        user_id: 100,
-        word: "test",
-        mean: "테슷트",
-        memo: null,
-        group_name: "",
-        level: "외웠어요",
-        create_at: Date.now(),
-      },
-      5: {
-        id: 5,
-        user_id: 100,
-        word: "test",
-        mean: "테슷트",
-        memo: null,
-        group_name: "",
-        level: "외웠어요",
-        create_at: Date.now(),
-      },
-      6: {
-        id: 6,
-        user_id: 100,
-        word: "test",
-        mean: "테슷트",
-        memo: null,
-        group_name: "",
-        level: "외웠어요",
-        create_at: Date.now(),
-      },
-      7: {
-        id: 7,
-        user_id: 100,
-        word: "test",
-        mean: "테슷트",
-        memo: null,
-        group_name: "",
-        level: "외웠어요",
-        create_at: Date.now(),
-      },
-      8: {
-        id: 8,
-        user_id: 100,
-        word: "test",
-        mean: "테슷트",
-        memo: null,
-        group_name: "",
-        level: "외웠어요",
-        create_at: Date.now(),
-      },
-      9: {
-        id: 9,
-        user_id: 100,
-        word: "test",
-        mean: "테슷트",
-        memo: null,
-        group_name: "",
-        level: "외웠어요",
-        create_at: Date.now(),
-      },
-    };
-
-    setCards(initialState);
-  }, []);
-
-  const onChangeLevel = (id) => {
-    const currentLevel = cards[id].level;
-    const changedLevel = getLevel(currentLevel);
-    setCards((prevCards) => {
-      const cards = { ...prevCards };
-      cards[id].level = changedLevel;
-      return cards;
-    });
+  const onSelectCard = (card) => {
+    if (!card) {
+      setSelectedCard(null);
+      return;
+    }
+    setSelectedCard(card);
   };
 
+  const onSelectGroup = (name) => {
+    setSelectedGroups(name);
+  };
+
+  const showEditPannel = () => {
+    setShowEdit((bool) => !bool);
+  };
+
+  const showAddPannel = () => {
+    setShowAdd((bool) => !bool);
+  };
+
+  const showGroupPannel = () => {
+    setShowGroup((bool) => !bool);
+  };
   return (
     <>
       <Header>
         <Button>
           <MdMenu />
         </Button>
-        <Title>List</Title>
+        <Title onClick={showGroupPannel}>
+          {selectedGroups}
+          <MdKeyboardArrowDown />
+        </Title>
         <Button>
           <MdSearch />
         </Button>
       </Header>
       <Contents>
         <CardList>
-          {Object.keys(cards).map((cardIndex) => (
+          {cards.map((card) => (
             <CardItem
-              key={cards[cardIndex].id}
-              card={cards[cardIndex]}
+              key={card.id}
+              card={card}
               onChangeLevel={onChangeLevel}
+              showEditPannel={showEditPannel}
+              onSelectCard={onSelectCard}
             />
           ))}
         </CardList>
@@ -162,6 +85,30 @@ const ListPage = (props) => {
           <LarnIcon className="icon" />
         </Link>
       </NavBar>
+      <AddButton showAddPannel={showAddPannel} />
+      {showEdit ? (
+        <EditPannel
+          selectedCard={selectedCard}
+          showEditPannel={showEditPannel}
+          onRemoveCard={onRemoveCard}
+          onEditCard={onEditCard}
+        />
+      ) : null}
+      {showAdd ? (
+        <AddPannel
+          showAddPannel={showAddPannel}
+          onCreateCard={onCreateCard}
+          showGroupPannel={showGroupPannel}
+          selectedGroups={selectedGroups}
+        />
+      ) : null}
+      {showGroup ? (
+        <GroupPannel
+          groups={groups}
+          showGroupPannel={showGroupPannel}
+          onSelectGroup={onSelectGroup}
+        />
+      ) : null}
     </>
   );
 };
@@ -174,11 +121,14 @@ const Header = styled.header`
   justify-content: space-between;
   background-color: black;
 `;
+
 const Contents = styled.main`
+  position: relative;
   height: 100%;
   overflow: scroll;
   padding: 0 1rem;
 `;
+
 const NavBar = styled.div`
   width: 100%;
   background-color: black;

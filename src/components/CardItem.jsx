@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { GiSpeaker } from "react-icons/gi";
+import { useLongPress } from "use-long-press";
 
-const CardItem = ({ card, onChangeLevel }) => {
+const CardItem = ({ card, onChangeLevel, showEditPannel, onSelectCard }) => {
   const [toggle, setToggle] = useState(false);
   const { id, word, mean, memo, level, group_name } = card;
 
@@ -17,8 +18,15 @@ const CardItem = ({ card, onChangeLevel }) => {
     onChangeLevel(id);
   };
 
+  const longPress = () => {
+    onSelectCard(card);
+    showEditPannel();
+  };
+
+  const bind = useLongPress(longPress);
+
   return (
-    <Card onClick={onToggle}>
+    <Card {...bind()} onClick={onToggle}>
       <Top>
         <GroupName>{group_name || "그룹 없음"}</GroupName>
         <PlayButton>
@@ -75,9 +83,11 @@ const PlayButton = styled.button`
     opacity: 0.8;
   }
 `;
+
 const Middle = styled.div`
   position: relative;
 `;
+
 const Word = styled.div`
   padding-top: 0.5rem;
   font-size: ${(props) => props.theme.sizes.xl3};
@@ -107,10 +117,12 @@ const DisplayLavel = styled.p`
   outline: none;
   font-size: ${(props) => props.theme.sizes.tiny};
   color: white;
+
   &:hover {
     cursor: pointer;
     opacity: 0.8;
   }
+
   &::before {
     content: "";
     position: absolute;
