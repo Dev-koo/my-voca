@@ -8,7 +8,7 @@ import CardList from "../components/CardList";
 import CardItem from "../components/CardItem";
 import AddButton from "../components/AddButton";
 import EditPannel from "../components/EditPannel";
-import AddPannel from "../components/AddPannel";
+import AddCardPannel from "../components/AddCardPannel";
 import GroupPannel from "../components/GroupPannel";
 
 const ListPage = ({
@@ -95,7 +95,7 @@ const ListPage = ({
         />
       ) : null}
       {showAdd ? (
-        <AddPannel
+        <AddCardPannel
           showAddPannel={showAddPannel}
           onCreateCard={onCreateCard}
           showGroupPannel={showGroupPannel}

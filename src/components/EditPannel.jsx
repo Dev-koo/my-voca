@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import AddPannel from "./AddPannel";
+import AddCardPannel from "./AddCardPannel";
 const EditPannel = ({
   selectedCard,
   showEditPannel,
@@ -47,7 +47,7 @@ const EditPannel = ({
         </BackGround>
       )}
       {showAdd ? (
-        <AddPannel
+        <AddCardPannel
           showAddPannel={showAddPannel}
           onCreateCard={handleEditCard}
           selectedGroups={selectedCard.group_name}

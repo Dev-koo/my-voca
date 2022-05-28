@@ -6,7 +6,12 @@ import { MdOutlineArrowBackIos } from "react-icons/md";
 import * as groupProvider from "../service/groupService";
 import GroupPannel from "./GroupPannel";
 
-const AddPannel = ({ showAddPannel, onCreateCard, selectedGroups, card }) => {
+const AddCardPannel = ({
+  showAddPannel,
+  onCreateCard,
+  selectedGroups,
+  card,
+}) => {
   const [groups, setGroups] = useState([]);
   const [selectGroup, setSelectGroup] = useState(selectedGroups);
 
@@ -102,7 +107,7 @@ const AddPannel = ({ showAddPannel, onCreateCard, selectedGroups, card }) => {
   );
 };
 
-export default AddPannel;
+export default AddCardPannel;
 
 const Pannel = styled.div`
   position: absolute;
