@@ -1,4 +1,6 @@
-const groups = [
+let commonInedex = 6;
+
+let groups = [
   {
     id: 1,
     group_name: "모든 그룹",
@@ -37,17 +39,17 @@ const groups = [
   //   { id: 24, group_name: "그룹1", user_id: 1, create_at: Date.now() },
 ];
 
-const groupsHidden = [
+let groupsHidden = [
   {
-    id: 1,
+    id: 2,
     group_name: "그룹 미지정",
     user_id: 1,
     create_at: Date.now(),
     count: 100,
   },
-  { id: 2, group_name: "그룹1", user_id: 1, create_at: Date.now(), count: 100 },
-  { id: 3, group_name: "그룹2", user_id: 1, create_at: Date.now(), count: 100 },
-  { id: 4, group_name: "그룹3", user_id: 1, create_at: Date.now(), count: 100 },
+  { id: 3, group_name: "그룹1", user_id: 1, create_at: Date.now(), count: 100 },
+  { id: 4, group_name: "그룹2", user_id: 1, create_at: Date.now(), count: 100 },
+  { id: 5, group_name: "그룹3", user_id: 1, create_at: Date.now(), count: 100 },
   //   { id: 6, group_name: "그룹1", user_id: 1, create_at: Date.now() },
   //   { id: 7, group_name: "그룹1", user_id: 1, create_at: Date.now() },
   //   { id: 8, group_name: "그룹1", user_id: 1, create_at: Date.now() },
@@ -70,8 +72,16 @@ const groupsHidden = [
 ];
 
 export async function getGroups() {
-  return groups;
+  return { groups, groupsHidden };
 }
 export async function getGroupsHidden() {
   return groupsHidden;
+}
+
+export async function create(group) {
+  const groupWithIdx = { id: commonInedex, ...group };
+  groups = [...groups, groupWithIdx];
+  groupsHidden = [...groupsHidden, groupWithIdx];
+  commonInedex += 1;
+  return groupWithIdx;
 }

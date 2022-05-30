@@ -4,17 +4,13 @@ import styled from "styled-components";
 import LearnPage from "./pages/LearnPage";
 import ListPage from "./pages/ListPage";
 import * as cardProvider from "./service/cardService";
-import * as groupProvider from "./service/groupService";
 
 function App() {
   const [cards, setCards] = useState([]);
-  const [groups, setGroups] = useState([]);
 
   useEffect(async () => {
     const cards = await cardProvider.getCard();
     setCards(cards);
-    const groups = await groupProvider.getGroups();
-    setGroups(groups);
   }, []);
 
   const indexRef = useRef(10);
@@ -87,7 +83,6 @@ function App() {
           element={
             <ListPage
               cards={cards}
-              groups={groups}
               onCreateCard={onCreateCard}
               onRemoveCard={onRemoveCard}
               onEditCard={onEditCard}

@@ -1,21 +1,26 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import AddCardPannel from "./AddCardPannel";
+import GroupPannel from "./GroupPannel";
 const EditPannel = ({
   selectedCard,
   showEditPannel,
   onRemoveCard,
   onEditCard,
+  onSelectCard,
 }) => {
   const [showAdd, setShowAdd] = useState(false);
+  const [showGroup, setShowGroup] = useState(false);
+
   const handleClick = (event) => {
     if (event.target.id === "cancel" || event.target.id === "background") {
+      onSelectCard(null);
       showEditPannel();
     }
   };
 
-  const showAddPannel = () => {
-    setShowAdd((bool) => !bool);
+  const onSelectGroup = (group_name) => {
+    handleEditCard({ group_name });
   };
 
   const handleEditCard = (card) => {
@@ -23,6 +28,7 @@ const EditPannel = ({
       ...selectedCard,
       ...card,
     };
+
     onEditCard(newCard);
     showEditPannel();
   };
@@ -31,6 +37,14 @@ const EditPannel = ({
     onRemoveCard(selectedCard.id);
     showEditPannel();
   };
+
+  const showAddPannel = () => {
+    setShowAdd((bool) => !bool);
+  };
+
+  const showGroupPannel = () => {
+    setShowGroup((bool) => !bool);
+  };
   return (
     <>
       {selectedCard && (
@@ -38,7 +52,7 @@ const EditPannel = ({
           <Pannel>
             <ButtonGroup>
               <Content>{selectedCard.word}</Content>
-              <Button>그룹 변경</Button>
+              <Button onClick={showGroupPannel}>그룹 변경</Button>
               <Button onClick={showAddPannel}>편집</Button>
               <Button onClick={handleRemove}>삭제</Button>
               <Button id="cancel">취소</Button>
@@ -52,6 +66,13 @@ const EditPannel = ({
           onCreateCard={handleEditCard}
           selectedGroups={selectedCard.group_name}
           card={selectedCard}
+        />
+      ) : null}
+      {showGroup ? (
+        <GroupPannel
+          showGroupPannel={showGroupPannel}
+          onSelectGroup={onSelectGroup}
+          flag="hidden"
         />
       ) : null}
     </>

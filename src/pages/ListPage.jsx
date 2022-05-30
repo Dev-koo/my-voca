@@ -13,7 +13,6 @@ import GroupPannel from "../components/GroupPannel";
 
 const ListPage = ({
   cards,
-  groups,
   onCreateCard,
   onRemoveCard,
   onEditCard,
@@ -50,6 +49,7 @@ const ListPage = ({
   const showGroupPannel = () => {
     setShowGroup((bool) => !bool);
   };
+
   return (
     <>
       <Header>
@@ -92,21 +92,22 @@ const ListPage = ({
           showEditPannel={showEditPannel}
           onRemoveCard={onRemoveCard}
           onEditCard={onEditCard}
+          onSelectCard={onSelectCard}
         />
       ) : null}
       {showAdd ? (
         <AddCardPannel
           showAddPannel={showAddPannel}
           onCreateCard={onCreateCard}
-          showGroupPannel={showGroupPannel}
           selectedGroups={selectedGroups}
+          card={selectedCard}
         />
       ) : null}
       {showGroup ? (
         <GroupPannel
-          groups={groups}
           showGroupPannel={showGroupPannel}
           onSelectGroup={onSelectGroup}
+          flag=""
         />
       ) : null}
     </>

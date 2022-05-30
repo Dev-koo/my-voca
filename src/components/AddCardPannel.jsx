@@ -1,10 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
-
 import { MdOutlineArrowBackIos } from "react-icons/md";
-
-import * as groupProvider from "../service/groupService";
 import GroupPannel from "./GroupPannel";
+import * as groupProvider from "../service/groupService";
 
 const AddCardPannel = ({
   showAddPannel,
@@ -12,23 +10,26 @@ const AddCardPannel = ({
   selectedGroups,
   card,
 }) => {
-  const [groups, setGroups] = useState([]);
-  const [selectGroup, setSelectGroup] = useState(selectedGroups);
+  const [selectedGroup, setSelectedGroup] = useState();
 
-  const [showGroups, setShowGroups] = useState(false);
+  const [showGroup, setShowGroup] = useState(false);
 
   const formRef = useRef();
   const wordRef = useRef();
   const meanRef = useRef();
   const memoRef = useRef();
 
-  useEffect(() => {
-    wordRef.current.focus();
+  useEffect(async () => {
+    if (selectedGroups === "모든 그룹") {
+      const data = await groupProvider.getGroups();
+      setSelectedGroup(data.groupsHidden.at(1).group_name);
+      return;
+    }
+    setSelectedGroup(selectedGroups);
   }, []);
 
-  useEffect(async () => {
-    const groups = await groupProvider.getGroupsHidden();
-    setGroups(groups);
+  useEffect(() => {
+    wordRef.current.focus();
   }, []);
 
   useEffect(() => {
@@ -43,7 +44,7 @@ const AddCardPannel = ({
     const word = wordRef.current.value;
     const mean = meanRef.current.value;
     const memo = memoRef.current.value;
-    const group_name = selectGroup;
+    const group_name = selectedGroup;
 
     const card = {
       word, // primary
@@ -62,12 +63,16 @@ const AddCardPannel = ({
     wordRef.current.focus();
   };
 
-  const showGroupPannel = () => {
-    setShowGroups((bool) => !bool);
+  const onSelectGroup = (name) => {
+    setSelectedGroup(name);
   };
 
-  const onSelectGroup = (name) => {
-    setSelectGroup(name);
+  const handleShowGroupPannel = () => {
+    showGroupPannel();
+  };
+
+  const showGroupPannel = () => {
+    setShowGroup((bool) => !bool);
   };
   return (
     <>
@@ -90,17 +95,17 @@ const AddCardPannel = ({
             <InputBox>
               <Input ref={memoRef} type="text" placeholder="메모 (옵션)" />
             </InputBox>
-            <SelectGroup onClick={showGroupPannel}>
-              &gt; {selectGroup || "그룹 없음"}
+            <SelectGroup onClick={handleShowGroupPannel}>
+              &gt; {selectedGroup || "그룹 없음"}
             </SelectGroup>
           </CardForm>
         </Contents>
       </Pannel>
-      {showGroups ? (
+      {showGroup ? (
         <GroupPannel
-          groups={groups}
           showGroupPannel={showGroupPannel}
           onSelectGroup={onSelectGroup}
+          flag="hidden"
         />
       ) : null}
     </>
