@@ -34,8 +34,8 @@ const ListPage = ({
     setSelectedCard(card);
   };
 
-  const onSelectGroup = (name) => {
-    setSelectedGroups(name);
+  const onSelectGroup = (group) => {
+    setSelectedGroups(group.group_name);
   };
 
   const showEditPannel = () => {
@@ -108,6 +108,7 @@ const ListPage = ({
           showGroupPannel={showGroupPannel}
           onSelectGroup={onSelectGroup}
           flag=""
+          editPannel="true"
         />
       ) : null}
     </>

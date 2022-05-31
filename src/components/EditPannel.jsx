@@ -12,14 +12,20 @@ const EditPannel = ({
   const [showAdd, setShowAdd] = useState(false);
   const [showGroup, setShowGroup] = useState(false);
 
+  useEffect(() => {
+    return () => {
+      onSelectCard(null);
+    };
+  }, []);
+
   const handleClick = (event) => {
     if (event.target.id === "cancel" || event.target.id === "background") {
-      onSelectCard(null);
       showEditPannel();
     }
   };
 
-  const onSelectGroup = (group_name) => {
+  const onSelectGroup = (group) => {
+    const { group_name } = group;
     handleEditCard({ group_name });
   };
 

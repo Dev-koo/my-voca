@@ -63,8 +63,8 @@ const AddCardPannel = ({
     wordRef.current.focus();
   };
 
-  const onSelectGroup = (name) => {
-    setSelectedGroup(name);
+  const onSelectGroup = (group) => {
+    setSelectedGroup(group.group_name);
   };
 
   const handleShowGroupPannel = () => {

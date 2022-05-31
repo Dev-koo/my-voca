@@ -7,7 +7,7 @@ const GroupItem = ({ group, handleSelecetdGroups }) => {
 
   const onChange = (event) => {
     setChecked(event.target.checked);
-    handleSelecetdGroups(event.target.id);
+    handleSelecetdGroups(group, event.target.checked);
   };
 
   return (

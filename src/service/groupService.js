@@ -85,3 +85,8 @@ export async function create(group) {
   commonInedex += 1;
   return groupWithIdx;
 }
+
+export async function remove(id) {
+  groups = groups.filter((group) => group.id !== id);
+  return id;
+}

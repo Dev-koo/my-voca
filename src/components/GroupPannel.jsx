@@ -5,10 +5,11 @@ import GroupItem from "./GroupItem";
 import AddButton from "./AddButton";
 import * as groupProvider from "../service/groupService";
 import AddGroupPannel from "./AddGroupPannel";
+import GroupEditPannel from "./GroupEditPannel";
 
-const GroupPannel = ({ showGroupPannel, onSelectGroup, flag }) => {
+const GroupPannel = ({ showGroupPannel, onSelectGroup, flag, editPannel }) => {
   const [groups, setGroups] = useState([]);
-  const [group, setGroup] = useState("");
+  const [selectedGroup, setSelectedGroup] = useState([]);
 
   const [showAddGroup, setShowAddGroup] = useState(false);
 
@@ -21,6 +22,22 @@ const GroupPannel = ({ showGroupPannel, onSelectGroup, flag }) => {
       setGroups(data.groups);
     }
   }, [groups]);
+
+  const onRemoveGroup = async () => {
+    if (selectedGroup.length > 1) {
+      console.log("하나만 선택해 주세요");
+      return;
+    }
+    const index = selectedGroup.at(0).id;
+    const response = await groupProvider.remove(index);
+    if (!response) {
+      throw new Error("Group Create Error");
+    }
+    setGroups((prevState) => {
+      const groups = prevState.filter((group) => group.id !== index);
+      return groups;
+    });
+  };
 
   const onAddGroup = async (name) => {
     const group = {
@@ -39,16 +56,30 @@ const GroupPannel = ({ showGroupPannel, onSelectGroup, flag }) => {
     });
   };
 
-  const handleSelecetdGroups = (name) => {
-    setGroup(name);
+  const appendGroup = (group) => {
+    setSelectedGroup((prevState) => {
+      const updatedGroup = prevState.concat([group]);
+      return updatedGroup;
+    });
+  };
+
+  const removeSelectGroup = (group) => {
+    setSelectedGroup((prevState) => {
+      const updatedGroup = prevState.filter((item) => item.id !== group.id);
+      return updatedGroup;
+    });
+  };
+
+  const handleSelecetdGroups = (group, isChecked) => {
+    isChecked ? appendGroup(group) : removeSelectGroup(group);
   };
 
   const handleSelectGroup = () => {
-    if (!group) {
+    if (!selectedGroup.length) {
       showGroupPannel();
       return;
     }
-    onSelectGroup(group);
+    onSelectGroup(selectedGroup.at(0));
     showGroupPannel();
   };
 
@@ -94,6 +125,9 @@ const GroupPannel = ({ showGroupPannel, onSelectGroup, flag }) => {
           onShowAddGroup={onShowAddGroup}
           onAddGroup={onAddGroup}
         />
+      ) : null}
+      {editPannel && selectedGroup.length ? (
+        <GroupEditPannel onRemoveGroup={onRemoveGroup} />
       ) : null}
     </>
   );
