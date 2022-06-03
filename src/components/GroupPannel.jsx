@@ -151,7 +151,7 @@ const Header = styled.header`
   justify-content: space-between;
   background-color: black;
 `;
-const Contents = styled.div`
+const Contents = styled.section`
   height: 100%;
   width: 100%;
   padding: 1rem;

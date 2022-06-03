@@ -6,18 +6,18 @@ let groups = [
     group_name: "모든 그룹",
     user_id: 1,
     create_at: Date.now(),
-    count: 100,
+    count: 10,
   },
   {
     id: 2,
     group_name: "그룹 미지정",
     user_id: 1,
     create_at: Date.now(),
-    count: 100,
+    count: 55,
   },
-  { id: 3, group_name: "그룹1", user_id: 1, create_at: Date.now(), count: 100 },
-  { id: 4, group_name: "그룹2", user_id: 1, create_at: Date.now(), count: 100 },
-  { id: 5, group_name: "그룹3", user_id: 1, create_at: Date.now(), count: 100 },
+  { id: 3, group_name: "그룹1", user_id: 1, create_at: Date.now(), count: 12 },
+  { id: 4, group_name: "그룹2", user_id: 1, create_at: Date.now(), count: 15 },
+  { id: 5, group_name: "그룹3", user_id: 1, create_at: Date.now(), count: 14 },
   //   { id: 6, group_name: "그룹1", user_id: 1, create_at: Date.now() },
   //   { id: 7, group_name: "그룹1", user_id: 1, create_at: Date.now() },
   //   { id: 8, group_name: "그룹1", user_id: 1, create_at: Date.now() },
@@ -45,11 +45,11 @@ let groupsHidden = [
     group_name: "그룹 미지정",
     user_id: 1,
     create_at: Date.now(),
-    count: 100,
+    count: 10,
   },
-  { id: 3, group_name: "그룹1", user_id: 1, create_at: Date.now(), count: 100 },
-  { id: 4, group_name: "그룹2", user_id: 1, create_at: Date.now(), count: 100 },
-  { id: 5, group_name: "그룹3", user_id: 1, create_at: Date.now(), count: 100 },
+  { id: 3, group_name: "그룹1", user_id: 1, create_at: Date.now(), count: 12 },
+  { id: 4, group_name: "그룹2", user_id: 1, create_at: Date.now(), count: 15 },
+  { id: 5, group_name: "그룹3", user_id: 1, create_at: Date.now(), count: 14 },
   //   { id: 6, group_name: "그룹1", user_id: 1, create_at: Date.now() },
   //   { id: 7, group_name: "그룹1", user_id: 1, create_at: Date.now() },
   //   { id: 8, group_name: "그룹1", user_id: 1, create_at: Date.now() },
@@ -89,4 +89,9 @@ export async function create(group) {
 export async function remove(id) {
   groups = groups.filter((group) => group.id !== id);
   return id;
+}
+
+export async function getGroupByName(group_name) {
+  const group = groups.find((group) => group.group_name === group_name);
+  return group;
 }

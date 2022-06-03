@@ -30,6 +30,11 @@ const Globalstyle = createGlobalStyle`
         cursor: pointer;
     }
 
+    a {
+    color: white;
+    text-decoration: none;
+    }
+
     #root {
         height: 100%;
     }

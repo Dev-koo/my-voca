@@ -2,23 +2,19 @@ import React from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 
-import { MdMenu, MdSearch } from "react-icons/md";
 import { BiFolder } from "react-icons/bi";
 import { ReactComponent as LarnIcon } from "../assets/larn-icon-black-resize.svg";
+import LearnPlanPannel from "../components/LearnPlanPannel";
 
-const LearnPage = (props) => {
+const LearnPage = ({ cards }) => {
   return (
     <>
       <Header>
-        <Button>
-          <MdMenu />
-        </Button>
-        <Title>List</Title>
-        <Button>
-          <MdSearch />
-        </Button>
+        <Title>학습</Title>
       </Header>
-      <Contents>Card Learn</Contents>
+      <Contents>
+        <LearnPlanPannel />
+      </Contents>
       <NavBar>
         <Link className="link" to={"/"}>
           <BiFolder className="icon" />
@@ -34,9 +30,8 @@ const LearnPage = (props) => {
 export default LearnPage;
 
 const Header = styled.header`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+  text-align: center;
+  padding: 1rem;
   background-color: black;
 `;
 const Contents = styled.main`
@@ -64,14 +59,6 @@ const NavBar = styled.div`
   }
 `;
 
-const Button = styled.button`
-  padding: 1rem;
-  font-size: ${(props) => props.theme.sizes.xl2};
-  background-color: transparent;
-  color: white;
-`;
-
 const Title = styled.p`
   color: white;
-  cursor: pointer;
 `;
