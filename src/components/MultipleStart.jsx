@@ -24,7 +24,7 @@ function randomArray(cards, showCard) {
   return answerArray;
 }
 
-const MultipleStart = ({ cardCount, selectedGroup, showMultiplePannel }) => {
+const MultipleStart = ({ cardCount, selectedGroup, showMultiplePanel }) => {
   const [cards, setCards] = useState([]); // 학습할 카드가 담긴 state (slice 된 상태)
   const [randomChoice, setRandomChoice] = useState(cards); // 보기 버튼 관리 state
   const [showCard, setShowCard] = useState(null); // 보여지는 카드
@@ -97,9 +97,9 @@ const MultipleStart = ({ cardCount, selectedGroup, showMultiplePannel }) => {
   };
   return (
     <>
-      <Pannel>
+      <Panel>
         <Header>
-          <Button onClick={showMultiplePannel}>
+          <Button onClick={showMultiplePanel}>
             <MdOutlineArrowBackIos />
           </Button>
           <Title>{`${cardIndex + 1} of ${cardCount}`}</Title>
@@ -131,18 +131,18 @@ const MultipleStart = ({ cardCount, selectedGroup, showMultiplePannel }) => {
             <ResultPanel
               resultCard={resultCard}
               onShowResult={onShowResult}
-              showMultiplePannel={showMultiplePannel}
+              showMultiplePanel={showMultiplePanel}
             />
           ) : null}
         </Contents>
-      </Pannel>
+      </Panel>
     </>
   );
 };
 
 export default MultipleStart;
 
-const Pannel = styled.div`
+const Panel = styled.div`
   position: absolute;
   top: 0;
   left: 0;

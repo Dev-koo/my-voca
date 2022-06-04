@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import AddCardPannel from "./AddCardPannel";
-import GroupPannel from "./GroupPannel";
-const EditPannel = ({
+import AddCardPanel from "./AddCardPanel";
+import GroupPanel from "./GroupPanel";
+const EditPanel = ({
   selectedCard,
-  showEditPannel,
+  showEditPanel,
   onRemoveCard,
   onEditCard,
   onSelectCard,
@@ -20,7 +20,7 @@ const EditPannel = ({
 
   const handleClick = (event) => {
     if (event.target.id === "cancel" || event.target.id === "background") {
-      showEditPannel();
+      showEditPanel();
     }
   };
 
@@ -36,47 +36,47 @@ const EditPannel = ({
     };
 
     onEditCard(newCard);
-    showEditPannel();
+    showEditPanel();
   };
 
   const handleRemove = () => {
     onRemoveCard(selectedCard.id);
-    showEditPannel();
+    showEditPanel();
   };
 
-  const showAddPannel = () => {
+  const showAddPanel = () => {
     setShowAdd((bool) => !bool);
   };
 
-  const showGroupPannel = () => {
+  const showGroupPanel = () => {
     setShowGroup((bool) => !bool);
   };
   return (
     <>
       {selectedCard && (
         <BackGround id="background" onClick={handleClick}>
-          <Pannel>
+          <Panel>
             <ButtonGroup>
               <Content>{selectedCard.word}</Content>
-              <Button onClick={showGroupPannel}>그룹 변경</Button>
-              <Button onClick={showAddPannel}>편집</Button>
+              <Button onClick={showGroupPanel}>그룹 변경</Button>
+              <Button onClick={showAddPanel}>편집</Button>
               <Button onClick={handleRemove}>삭제</Button>
               <Button id="cancel">취소</Button>
             </ButtonGroup>
-          </Pannel>
+          </Panel>
         </BackGround>
       )}
       {showAdd ? (
-        <AddCardPannel
-          showAddPannel={showAddPannel}
+        <AddCardPanel
+          showAddPanel={showAddPanel}
           onCreateCard={handleEditCard}
           selectedGroups={selectedCard.group_name}
           card={selectedCard}
         />
       ) : null}
       {showGroup ? (
-        <GroupPannel
-          showGroupPannel={showGroupPannel}
+        <GroupPanel
+          showGroupPanel={showGroupPanel}
           onSelectGroup={onSelectGroup}
           flag="hidden"
         />
@@ -85,7 +85,7 @@ const EditPannel = ({
   );
 };
 
-export default EditPannel;
+export default EditPanel;
 
 const BackGround = styled.div`
   position: fixed;
@@ -96,7 +96,7 @@ const BackGround = styled.div`
   background: rgba(0, 0, 0, 0.805);
 `;
 
-const Pannel = styled.div`
+const Panel = styled.div`
   position: absolute;
   bottom: 0;
   left: 50%;

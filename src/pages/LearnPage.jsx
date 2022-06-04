@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 
 import { BiFolder } from "react-icons/bi";
 import { ReactComponent as LarnIcon } from "../assets/larn-icon-black-resize.svg";
-import LearnPlanPannel from "../components/LearnPlanPannel";
+import LearnPlanPanel from "../components/LearnPlanPanel";
 
 const LearnPage = ({ cards }) => {
   return (
@@ -13,7 +13,7 @@ const LearnPage = ({ cards }) => {
         <Title>학습</Title>
       </Header>
       <Contents>
-        <LearnPlanPannel />
+        <LearnPlanPanel />
       </Contents>
       <NavBar>
         <Link className="link" to={"/"}>

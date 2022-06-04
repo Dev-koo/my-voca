@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import { MdOutlineArrowBackIos } from "react-icons/md";
 import styled from "styled-components";
-const InputPannel = ({
+const InputPanel = ({
   max,
   currentCount,
   onChangeCount,
-  selectedPannel,
-  showSettingPannel,
+  selectedPanel,
+  showSettingPanel,
 }) => {
   const [count, setCount] = useState(parseInt(currentCount));
   const onChangeHandler = (event) => {
@@ -23,16 +23,16 @@ const InputPannel = ({
   };
   const saveCount = () => {
     onChangeCount(parseInt(count));
-    showSettingPannel();
+    showSettingPanel();
   };
   return (
     <>
-      <Pannel>
+      <Panel>
         <Header>
-          <Button onClick={showSettingPannel}>
+          <Button onClick={showSettingPanel}>
             <MdOutlineArrowBackIos />
           </Button>
-          <Title>{selectedPannel}</Title>
+          <Title>{selectedPanel}</Title>
           <Button onClick={saveCount}>완료</Button>
         </Header>
         <Contents>
@@ -43,14 +43,14 @@ const InputPannel = ({
             autoFocus
           />
         </Contents>
-      </Pannel>
+      </Panel>
     </>
   );
 };
 
-export default InputPannel;
+export default InputPanel;
 
-const Pannel = styled.div`
+const Panel = styled.div`
   position: absolute;
   top: 0;
   left: 0;

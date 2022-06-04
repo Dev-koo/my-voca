@@ -1,18 +1,18 @@
 import React from "react";
 import styled from "styled-components";
 
-const GroupEditPannel = ({ onRemoveGroup }) => {
+const GroupEditPanel = ({ onRemoveGroup }) => {
   return (
-    <Pannel>
+    <Panel>
       <Button>병합(미구현)</Button>
       <Button onClick={onRemoveGroup}>삭제</Button>
-    </Pannel>
+    </Panel>
   );
 };
 
-export default GroupEditPannel;
+export default GroupEditPanel;
 
-const Pannel = styled.div`
+const Panel = styled.div`
   position: absolute;
   bottom: 0;
   left: 0;

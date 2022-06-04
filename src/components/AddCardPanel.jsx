@@ -1,15 +1,10 @@
 import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import { MdOutlineArrowBackIos } from "react-icons/md";
-import GroupPannel from "./GroupPannel";
+import GroupPanel from "./GroupPanel";
 import * as groupProvider from "../service/groupService";
 
-const AddCardPannel = ({
-  showAddPannel,
-  onCreateCard,
-  selectedGroups,
-  card,
-}) => {
+const AddCardPanel = ({ showAddPanel, onCreateCard, selectedGroups, card }) => {
   const [selectedGroup, setSelectedGroup] = useState();
 
   const [showGroup, setShowGroup] = useState(false);
@@ -67,18 +62,18 @@ const AddCardPannel = ({
     setSelectedGroup(group.group_name);
   };
 
-  const handleShowGroupPannel = () => {
-    showGroupPannel();
+  const handleShowGroupPanel = () => {
+    showGroupPanel();
   };
 
-  const showGroupPannel = () => {
+  const showGroupPanel = () => {
     setShowGroup((bool) => !bool);
   };
   return (
     <>
-      <Pannel>
+      <Panel>
         <Header>
-          <Button onClick={showAddPannel}>
+          <Button onClick={showAddPanel}>
             <MdOutlineArrowBackIos />
           </Button>
           <Title>새 단어</Title>
@@ -95,15 +90,15 @@ const AddCardPannel = ({
             <InputBox>
               <Input ref={memoRef} type="text" placeholder="메모 (옵션)" />
             </InputBox>
-            <SelectGroup onClick={handleShowGroupPannel}>
+            <SelectGroup onClick={handleShowGroupPanel}>
               &gt; {selectedGroup || "그룹 없음"}
             </SelectGroup>
           </CardForm>
         </Contents>
-      </Pannel>
+      </Panel>
       {showGroup ? (
-        <GroupPannel
-          showGroupPannel={showGroupPannel}
+        <GroupPanel
+          showGroupPanel={showGroupPanel}
           onSelectGroup={onSelectGroup}
           flag="hidden"
         />
@@ -112,9 +107,9 @@ const AddCardPannel = ({
   );
 };
 
-export default AddCardPannel;
+export default AddCardPanel;
 
-const Pannel = styled.div`
+const Panel = styled.div`
   position: absolute;
   top: 0;
   left: 0;

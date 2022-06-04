@@ -4,13 +4,13 @@ import {
   MdOutlineArrowBackIos,
   MdOutlineArrowForwardIos,
 } from "react-icons/md";
-import GroupPannel from "./GroupPannel";
-import InputPannel from "./InputPannel";
+import GroupPanel from "./GroupPanel";
+import InputPanel from "./InputPanel";
 import MultipleStart from "./MultipleStart";
 
 const MultipleChoice = ({ onShowMultiple }) => {
   const [selectedGroup, setSelectedGroup] = useState("그룹을 선택해 주세요");
-  const [selectedPannel, setSelectedPannel] = useState("");
+  const [selectedPanel, setSelectedPanel] = useState("");
   const [cardCount, setCardCount] = useState(0);
 
   const [showGroup, setShowGroup] = useState(false);
@@ -37,73 +37,73 @@ const MultipleChoice = ({ onShowMultiple }) => {
     setCardCount(count);
   };
 
-  const showGroupPannel = () => {
+  const showGroupPanel = () => {
     setShowGroup((bool) => !bool);
   };
 
-  const showMultiplePannel = () => {
+  const showMultiplePanel = () => {
     setShowMultiple((bool) => !bool);
   };
 
-  const showSettingPannel = () => {
+  const showSettingPanel = () => {
     setShowSetting((bool) => !bool);
     const label = document.querySelector(".label").innerText;
-    setSelectedPannel(label);
+    setSelectedPanel(label);
   };
 
   return (
-    <Pannel>
+    <Panel>
       <Header>
         <Button onClick={onShowMultiple}>
           <MdOutlineArrowBackIos />
         </Button>
         <Title>사지선다</Title>
-        <Button onClick={showMultiplePannel}>시작하기</Button>
+        <Button onClick={showMultiplePanel}>시작하기</Button>
       </Header>
       <Contents>
-        <SettingPannel>
-          <SettingItem onClick={showGroupPannel}>
+        <SettingPanel>
+          <SettingItem onClick={showGroupPanel}>
             <Label>학습할 그룹</Label>
             <Value>{selectedGroup}</Value>
             <MdOutlineArrowForwardIos />
           </SettingItem>
-          <SettingItem onClick={showSettingPannel}>
+          <SettingItem onClick={showSettingPanel}>
             <Label className="label">문제 수</Label>
             <Value>{cardCount}</Value>
             <MdOutlineArrowForwardIos />
           </SettingItem>
-        </SettingPannel>
+        </SettingPanel>
       </Contents>
       {showGroup && (
-        <GroupPannel
-          showGroupPannel={showGroupPannel}
+        <GroupPanel
+          showGroupPanel={showGroupPanel}
           onSelectGroup={onSelectGroup}
-          editPannel={false}
+          editPanel={false}
         />
       )}
       {showSetting && (
-        <InputPannel
+        <InputPanel
           max={cards}
           currentCount={cardCount}
           onChangeCount={onChangeCount}
-          selectedPannel={selectedPannel}
-          showSettingPannel={showSettingPannel}
+          selectedPanel={selectedPanel}
+          showSettingPanel={showSettingPanel}
         />
       )}
       {showMultiple ? (
         <MultipleStart
           cardCount={cardCount}
           selectedGroup={selectedGroup}
-          showMultiplePannel={showMultiplePannel}
+          showMultiplePanel={showMultiplePanel}
         />
       ) : null}
-    </Pannel>
+    </Panel>
   );
 };
 
 export default MultipleChoice;
 
-const Pannel = styled.div`
+const Panel = styled.div`
   position: absolute;
   top: 0;
   left: 0;
@@ -134,7 +134,7 @@ const Contents = styled.section`
   height: 100%;
 `;
 
-const SettingPannel = styled.div`
+const SettingPanel = styled.div`
   padding: 1rem;
   display: flex;
   flex-direction: column;

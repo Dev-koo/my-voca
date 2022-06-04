@@ -4,10 +4,10 @@ import { MdOutlineArrowBackIos, MdSearch } from "react-icons/md";
 import GroupItem from "./GroupItem";
 import AddButton from "./AddButton";
 import * as groupProvider from "../service/groupService";
-import AddGroupPannel from "./AddGroupPannel";
-import GroupEditPannel from "./GroupEditPannel";
+import AddGroupPanel from "./AddGroupPanel";
+import GroupEditPanel from "./GroupEditPanel";
 
-const GroupPannel = ({ showGroupPannel, onSelectGroup, flag, editPannel }) => {
+const GroupPanel = ({ showGroupPanel, onSelectGroup, flag, editPanel }) => {
   const [groups, setGroups] = useState([]);
   const [selectedGroup, setSelectedGroup] = useState([]);
 
@@ -76,11 +76,11 @@ const GroupPannel = ({ showGroupPannel, onSelectGroup, flag, editPannel }) => {
 
   const handleSelectGroup = () => {
     if (!selectedGroup.length) {
-      showGroupPannel();
+      showGroupPanel();
       return;
     }
     onSelectGroup(selectedGroup.at(0));
-    showGroupPannel();
+    showGroupPanel();
   };
 
   const onShowAddGroup = () => {
@@ -88,9 +88,9 @@ const GroupPannel = ({ showGroupPannel, onSelectGroup, flag, editPannel }) => {
   };
   return (
     <>
-      <Pannel>
+      <Panel>
         <Header>
-          <Button onClick={showGroupPannel}>
+          <Button onClick={showGroupPanel}>
             <MdOutlineArrowBackIos />
           </Button>
           <Title>그룹 선택</Title>
@@ -117,25 +117,25 @@ const GroupPannel = ({ showGroupPannel, onSelectGroup, flag, editPannel }) => {
                 />
               ))}
           </GroupList>
-          <AddButton showAddPannel={onShowAddGroup} />
+          <AddButton showAddPanel={onShowAddGroup} />
         </Contents>
-      </Pannel>
+      </Panel>
       {showAddGroup ? (
-        <AddGroupPannel
+        <AddGroupPanel
           onShowAddGroup={onShowAddGroup}
           onAddGroup={onAddGroup}
         />
       ) : null}
-      {editPannel && selectedGroup.length ? (
-        <GroupEditPannel onRemoveGroup={onRemoveGroup} />
+      {editPanel && selectedGroup.length ? (
+        <GroupEditPanel onRemoveGroup={onRemoveGroup} />
       ) : null}
     </>
   );
 };
 
-export default GroupPannel;
+export default GroupPanel;
 
-const Pannel = styled.div`
+const Panel = styled.div`
   position: absolute;
   top: 0;
   left: 0;

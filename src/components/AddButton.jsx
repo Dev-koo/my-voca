@@ -2,9 +2,9 @@ import React from "react";
 import styled from "styled-components";
 import { FiPlus } from "react-icons/fi";
 
-const AddButton = ({ showAddPannel }) => {
+const AddButton = ({ showAddPanel }) => {
   return (
-    <AddCard onClick={showAddPannel}>
+    <AddCard onClick={showAddPanel}>
       <FiPlus />
     </AddCard>
   );

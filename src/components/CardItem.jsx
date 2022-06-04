@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { GiSpeaker } from "react-icons/gi";
 import { useLongPress } from "use-long-press";
 
-const CardItem = ({ card, onChangeLevel, showEditPannel, onSelectCard }) => {
+const CardItem = ({ card, onChangeLevel, showEditPanel, onSelectCard }) => {
   const [toggle, setToggle] = useState(false);
   const { id, word, mean, memo, level, group_name } = card;
 
@@ -20,7 +20,7 @@ const CardItem = ({ card, onChangeLevel, showEditPannel, onSelectCard }) => {
 
   const longPress = () => {
     onSelectCard(card);
-    showEditPannel();
+    showEditPanel();
   };
 
   const bind = useLongPress(longPress);

@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { MdClose } from "react-icons/md";
 import ResultCardItem from "./ResultCardItem";
 
-const ResultPanel = ({ resultCard, onShowResult, showMultiplePannel }) => {
+const ResultPanel = ({ resultCard, onShowResult, showMultiplePanel }) => {
   const [wrongCards, setWrongCards] = useState([]);
   const [currentCards, setCurrentCards] = useState([]);
   const [showCards, setShowCards] = useState([]);
@@ -24,11 +24,11 @@ const ResultPanel = ({ resultCard, onShowResult, showMultiplePannel }) => {
 
   const handleClose = () => {
     onShowResult();
-    showMultiplePannel();
+    showMultiplePanel();
   };
 
   return (
-    <Pannel>
+    <Panel>
       <Header>
         <Button onClick={handleClose}>
           <MdClose />
@@ -51,13 +51,13 @@ const ResultPanel = ({ resultCard, onShowResult, showMultiplePannel }) => {
         {showCards &&
           showCards.map((card) => <ResultCardItem key={card.id} card={card} />)}
       </CardList>
-    </Pannel>
+    </Panel>
   );
 };
 
 export default ResultPanel;
 
-const Pannel = styled.div`
+const Panel = styled.div`
   position: absolute;
   top: 0;
   left: 0;

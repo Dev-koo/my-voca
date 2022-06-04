@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { MdOutlineArrowForwardIos } from "react-icons/md";
 import MultipleChoice from "./MultipleChoice";
 
-const LearnPlanPannel = (props) => {
+const LearnPlanPanel = (props) => {
   const [showMultiple, setShowMultiple] = useState(false);
 
   const onShowMultiple = () => {
@@ -11,7 +11,7 @@ const LearnPlanPannel = (props) => {
   };
   return (
     <>
-      <Pannel>
+      <Panel>
         <LinkButton>
           <Link className="link" onClick={onShowMultiple}>
             사지선다
@@ -36,13 +36,13 @@ const LearnPlanPannel = (props) => {
             <MdOutlineArrowForwardIos />
           </Link>
         </LinkButton>
-      </Pannel>
+      </Panel>
       {showMultiple ? <MultipleChoice onShowMultiple={onShowMultiple} /> : null}
     </>
   );
 };
 
-const Pannel = styled.div`
+const Panel = styled.div`
   width: 100%;
   padding: 1rem;
 `;
@@ -58,4 +58,4 @@ const Link = styled.a`
   padding: 2rem 0rem;
   font-size: ${(props) => props.theme.sizes.xl};
 `;
-export default LearnPlanPannel;
+export default LearnPlanPanel;

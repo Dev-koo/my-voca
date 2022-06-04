@@ -7,9 +7,9 @@ import { ReactComponent as LarnIcon } from "../assets/larn-icon-black-resize.svg
 import CardList from "../components/CardList";
 import CardItem from "../components/CardItem";
 import AddButton from "../components/AddButton";
-import EditPannel from "../components/EditPannel";
-import AddCardPannel from "../components/AddCardPannel";
-import GroupPannel from "../components/GroupPannel";
+import EditPanel from "../components/EditPanel";
+import AddCardPanel from "../components/AddCardPanel";
+import GroupPanel from "../components/GroupPanel";
 
 const ListPage = ({
   cards,
@@ -38,15 +38,15 @@ const ListPage = ({
     setSelectedGroups(group.group_name);
   };
 
-  const showEditPannel = () => {
+  const showEditPanel = () => {
     setShowEdit((bool) => !bool);
   };
 
-  const showAddPannel = () => {
+  const showAddPanel = () => {
     setShowAdd((bool) => !bool);
   };
 
-  const showGroupPannel = () => {
+  const showGroupPanel = () => {
     setShowGroup((bool) => !bool);
   };
 
@@ -56,7 +56,7 @@ const ListPage = ({
         <Button>
           <MdMenu />
         </Button>
-        <Title onClick={showGroupPannel}>
+        <Title onClick={showGroupPanel}>
           {selectedGroups}
           <MdKeyboardArrowDown />
         </Title>
@@ -71,7 +71,7 @@ const ListPage = ({
               key={card.id}
               card={card}
               onChangeLevel={onChangeLevel}
-              showEditPannel={showEditPannel}
+              showEditPanel={showEditPanel}
               onSelectCard={onSelectCard}
             />
           ))}
@@ -85,30 +85,30 @@ const ListPage = ({
           <LarnIcon className="icon" />
         </Link>
       </NavBar>
-      <AddButton showAddPannel={showAddPannel} />
+      <AddButton showAddPanel={showAddPanel} />
       {showEdit ? (
-        <EditPannel
+        <EditPanel
           selectedCard={selectedCard}
-          showEditPannel={showEditPannel}
+          showEditPanel={showEditPanel}
           onRemoveCard={onRemoveCard}
           onEditCard={onEditCard}
           onSelectCard={onSelectCard}
         />
       ) : null}
       {showAdd ? (
-        <AddCardPannel
-          showAddPannel={showAddPannel}
+        <AddCardPanel
+          showAddPanel={showAddPanel}
           onCreateCard={onCreateCard}
           selectedGroups={selectedGroups}
           card={selectedCard}
         />
       ) : null}
       {showGroup ? (
-        <GroupPannel
-          showGroupPannel={showGroupPannel}
+        <GroupPanel
+          showGroupPanel={showGroupPanel}
           onSelectGroup={onSelectGroup}
           flag=""
-          editPannel="true"
+          editPanel="true"
         />
       ) : null}
     </>

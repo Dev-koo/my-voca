@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from "react";
 import styled from "styled-components";
 import { MdOutlineArrowBackIos } from "react-icons/md";
 
-const AddGroupPannel = ({ onShowAddGroup, onAddGroup }) => {
+const AddGroupPanel = ({ onShowAddGroup, onAddGroup }) => {
   const inputRef = useRef();
 
   useEffect(() => {
@@ -15,7 +15,7 @@ const AddGroupPannel = ({ onShowAddGroup, onAddGroup }) => {
     onShowAddGroup();
   };
   return (
-    <Pannel>
+    <Panel>
       <Header>
         <Button onClick={onShowAddGroup}>
           <MdOutlineArrowBackIos />
@@ -30,13 +30,13 @@ const AddGroupPannel = ({ onShowAddGroup, onAddGroup }) => {
           placeholder="그룹 이름을 입력해 주세요."
         />
       </Contents>
-    </Pannel>
+    </Panel>
   );
 };
 
-export default AddGroupPannel;
+export default AddGroupPanel;
 
-const Pannel = styled.div`
+const Panel = styled.div`
   position: absolute;
   top: 0;
   left: 0;
