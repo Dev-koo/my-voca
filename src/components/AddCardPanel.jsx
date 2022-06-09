@@ -69,6 +69,14 @@ const AddCardPanel = ({ showAddPanel, onCreateCard, selectedGroups, card }) => {
   const showGroupPanel = () => {
     setShowGroup((bool) => !bool);
   };
+
+  const onKeyPressHandler = (e) => {
+    if (e.code === "Enter") {
+      handleCreateCard();
+    } else if (e.code === "Escape") {
+      console.log(e.code);
+    }
+  };
   return (
     <>
       <Panel>
@@ -80,7 +88,7 @@ const AddCardPanel = ({ showAddPanel, onCreateCard, selectedGroups, card }) => {
           <Button onClick={handleCreateCard}>저장</Button>
         </Header>
         <Contents>
-          <CardForm ref={formRef}>
+          <CardForm ref={formRef} onKeyPress={onKeyPressHandler}>
             <InputBox>
               <Input ref={wordRef} type="text" placeholder="단어" />
             </InputBox>
