@@ -2,9 +2,9 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { MdOutlineArrowBackIos } from "react-icons/md";
 import { GiSpeaker } from "react-icons/gi";
-
 import * as cardProvider from "../service/cardService";
 import ResultPanel from "./ResultPanel";
+import { useAudio } from "../contexts/AudioContext";
 
 function randomArray(cards, showCard) {
   //   console.log(`show card = ${showCard.id} : ${showCard.word}`);
@@ -36,20 +36,30 @@ const MultipleStart = ({ cardCount, selectedGroup, showMultiplePanel }) => {
 
   const [showResult, setShowResult] = useState(false); // 결과 panel용 토글 state
 
+  const onPlay = useAudio();
+
   useEffect(async () => {
-    const response = await cardProvider.getRandomCard();
-    const learnCards = response.slice(0, cardCount);
-    setCards(learnCards); // 학습할 카드가 담긴 state (slice 된 상태)
-    setShowCard(learnCards[cardIndex]); // 보여지는 카드
-    // 보기 버튼 관리 state (인덱스 0~4 까지 보여지고있다.)
-    setRandomChoice(randomArray(response, learnCards[0]));
-    // 보기 버튼을 위해 있어야할 모든 그룹 카드
-    setAllCards(response);
+    await cardProvider
+      .getRandomCard() //
+      .then((response) => {
+        const learnCards = response.slice(0, cardCount);
+        setCards(learnCards); // 학습할 카드가 담긴 state (slice 된 상태)
+        setShowCard(learnCards[cardIndex]); // 보여지는 카드
+        // 보기 버튼 관리 state (인덱스 0~4 까지 보여지고있다.)
+        setRandomChoice(randomArray(response, learnCards[0]));
+        // 보기 버튼을 위해 있어야할 모든 그룹 카드
+        setAllCards(response);
+        return response[0].word;
+      }); //
   }, []);
 
   useEffect(() => {
     setRandomChoice(randomArray(allCards, showCard));
   }, [cardIndex]);
+
+  useEffect(() => {
+    showCard && onPlay(showCard.word);
+  }, [showCard]);
 
   const next = () => {
     setCardIndex((prevState) => {
@@ -68,28 +78,40 @@ const MultipleStart = ({ cardCount, selectedGroup, showMultiplePanel }) => {
     if (card.mean === showCard.mean) {
       console.log("정답");
       setResultCard((prevState) => {
-        const larnCard = [...prevState];
-        const newCard = larnCard.concat([{ ...card, correct: true }]);
+        const resultCard = [...prevState];
+        const newCard = resultCard.concat([{ ...showCard, correct: true }]);
         return newCard;
       });
       if (cardCount === cardIndex + 1) {
         onShowResult();
         return;
       }
+      setAllCards((prevState) => {
+        const allCards = prevState.filter((card) => card.id !== showCard.id);
+        return allCards;
+      });
       next();
     } else {
       console.log("노답");
       setResultCard((prevState) => {
-        const larnCard = [...prevState];
-        const newCard = larnCard.concat([{ ...card, correct: false }]);
+        const resultCard = [...prevState];
+        const newCard = resultCard.concat([{ ...showCard, correct: false }]);
         return newCard;
       });
       if (cardCount === cardIndex + 1) {
         onShowResult();
         return;
       }
+      setAllCards((prevState) => {
+        const allCards = prevState.filter((card) => card.id !== showCard.id);
+        return allCards;
+      });
       next();
     }
+  };
+
+  const playHandler = () => {
+    onPlay(showCard.word);
   };
 
   const onShowResult = () => {
@@ -103,7 +125,7 @@ const MultipleStart = ({ cardCount, selectedGroup, showMultiplePanel }) => {
             <MdOutlineArrowBackIos />
           </Button>
           <Title>{`${cardIndex + 1} of ${cardCount}`}</Title>
-          <Button onClick={next}>
+          <Button onClick={playHandler}>
             <GiSpeaker />
           </Button>
         </Header>

@@ -1,15 +1,18 @@
 import React from "react";
 import styled from "styled-components";
 import { GiSpeaker } from "react-icons/gi";
+import { useAudio } from "../contexts/AudioContext";
 
 const ResultCardItem = ({ card: { word, mean, correct } }) => {
+  const onPlay = useAudio();
+
   return (
     <Card isCorrect={correct}>
       <Box>
         <Word>{word}</Word>
         <Mean>{mean}</Mean>
       </Box>
-      <PlayButton>
+      <PlayButton onClick={() => onPlay(word)}>
         <GiSpeaker />
       </PlayButton>
     </Card>

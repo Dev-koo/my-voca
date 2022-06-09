@@ -13,7 +13,7 @@ function App() {
     setCards(cards);
   }, []);
 
-  const indexRef = useRef(10);
+  const indexRef = useRef(11);
 
   const onChangeLevel = async (id) => {
     const updatedCard = await cardProvider.changeLevel(id);

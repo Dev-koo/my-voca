@@ -2,9 +2,12 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { GiSpeaker } from "react-icons/gi";
 import { useLongPress } from "use-long-press";
+import { useAudio } from "../contexts/AudioContext";
 
 const CardItem = ({ card, onChangeLevel, showEditPanel, onSelectCard }) => {
   const [toggle, setToggle] = useState(false);
+  const onPlay = useAudio();
+
   const { id, word, mean, memo, level, group_name } = card;
 
   const onToggle = (event) => {
@@ -14,10 +17,6 @@ const CardItem = ({ card, onChangeLevel, showEditPanel, onSelectCard }) => {
     setToggle((bool) => !bool);
   };
 
-  const changeLevel = () => {
-    onChangeLevel(id);
-  };
-
   const longPress = () => {
     onSelectCard(card);
     showEditPanel();
@@ -25,11 +24,16 @@ const CardItem = ({ card, onChangeLevel, showEditPanel, onSelectCard }) => {
 
   const bind = useLongPress(longPress);
 
+  const playHandler = (event) => {
+    event.stopPropagation();
+    onPlay(word);
+  };
+
   return (
     <Card {...bind()} onClick={onToggle}>
       <Top>
         <GroupName>{group_name || "그룹 없음"}</GroupName>
-        <PlayButton>
+        <PlayButton onClick={playHandler}>
           <GiSpeaker />
         </PlayButton>
       </Top>
@@ -39,7 +43,11 @@ const CardItem = ({ card, onChangeLevel, showEditPanel, onSelectCard }) => {
         {toggle && memo ? <Memo>{memo}</Memo> : null}
       </Middle>
       <Bottom>
-        <DisplayLavel onClick={changeLevel} level={level} id="level">
+        <DisplayLavel
+          onClick={() => onChangeLevel(id)}
+          level={level}
+          id="level"
+        >
           {level}
         </DisplayLavel>
       </Bottom>

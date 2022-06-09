@@ -7,9 +7,8 @@ const ResultPanel = ({ resultCard, onShowResult, showMultiplePanel }) => {
   const [wrongCards, setWrongCards] = useState([]);
   const [currentCards, setCurrentCards] = useState([]);
   const [showCards, setShowCards] = useState([]);
-  useEffect(() => {
-    console.log(resultCard);
 
+  useEffect(() => {
     const correctCards = resultCard.filter((item) => item.correct === true);
     const wrongCards = resultCard.filter((item) => item.correct === false);
 
@@ -38,7 +37,7 @@ const ResultPanel = ({ resultCard, onShowResult, showMultiplePanel }) => {
       </Header>
       <ResultType>
         <Subject onClick={() => onClickSubject(resultCard)}>
-          모든 단어({showCards.length})
+          모든 단어({resultCard.length})
         </Subject>
         <Subject onClick={() => onClickSubject(currentCards)}>
           정답({currentCards.length})
