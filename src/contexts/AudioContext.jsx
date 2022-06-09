@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext } from "react";
 import AudioService from "../service/audioService";
 
 const AudioPlayContext = createContext();
@@ -14,10 +14,7 @@ const AudioPlayer = () => {
 };
 
 export const AudioProvider = ({ children }) => {
-  const [audioSorce, setAudioSource] = useState("");
-
   const onPlay = async (text) => {
-    console.log("호출!");
     const buffer = await audioService.getAudio(text);
     const audioContext = getAudioContext();
 
@@ -29,13 +26,10 @@ export const AudioProvider = ({ children }) => {
     source.buffer = audioBuffer;
     source.connect(audioContext.destination);
     source.start();
-
-    setAudioSource(source);
   };
 
   const getAudioContext = () => {
     const audioContent = new AudioContext();
-
     return audioContent;
   };
   return (
