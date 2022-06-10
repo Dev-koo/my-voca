@@ -46,6 +46,6 @@ export default class AuthService {
 
   // 로그아웃
   async logout() {
-    this.tokenStorage.clear();
+    this.tokenStorage.clearToken();
   }
 }

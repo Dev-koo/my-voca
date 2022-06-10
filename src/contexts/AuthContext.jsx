@@ -8,7 +8,6 @@ const AuthContext = ({ authService, tokenStorage, children }) => {
 
   useEffect(() => {
     const token = tokenStorage.getToken();
-    console.log(token);
     if (token) {
       setUser({ username: "", token });
     }
@@ -21,8 +20,12 @@ const AuthContext = ({ authService, tokenStorage, children }) => {
   const onLogin = (username, password) => {
     authService.login(username, password).then((data) => setUser(data));
   };
+
+  const onLogout = () => {
+    authService.logout().then(() => setUser(null));
+  };
   return (
-    <AuthProvider.Provider value={user}>
+    <AuthProvider.Provider value={onLogout}>
       {user ? children : <LoginPage onSignUp={onSignUp} onLogin={onLogin} />}
     </AuthProvider.Provider>
   );

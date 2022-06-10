@@ -10,6 +10,7 @@ import AddButton from "../components/AddButton";
 import EditPanel from "../components/EditPanel";
 import AddCardPanel from "../components/AddCardPanel";
 import GroupPanel from "../components/GroupPanel";
+import MenuPanel from "../components/MenuPanel";
 
 const ListPage = ({
   cards,
@@ -25,6 +26,7 @@ const ListPage = ({
   const [showEdit, setShowEdit] = useState(false);
   const [showAdd, setShowAdd] = useState(false);
   const [showGroup, setShowGroup] = useState(false);
+  const [showMenu, setShowMenu] = useState(false);
 
   const onSelectCard = (card) => {
     if (!card) {
@@ -50,10 +52,14 @@ const ListPage = ({
     setShowGroup((bool) => !bool);
   };
 
+  const showMenuPanel = () => {
+    setShowMenu((bool) => !bool);
+  };
+
   return (
     <>
       <Header>
-        <Button>
+        <Button onClick={showMenuPanel}>
           <MdMenu />
         </Button>
         <Title onClick={showGroupPanel}>
@@ -86,6 +92,7 @@ const ListPage = ({
         </Link>
       </NavBar>
       <AddButton showAddPanel={showAddPanel} />
+      {showMenu ? <MenuPanel showMenuPanel={showMenuPanel} /> : null}
       {showEdit ? (
         <EditPanel
           selectedCard={selectedCard}

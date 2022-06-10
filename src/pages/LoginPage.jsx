@@ -34,6 +34,7 @@ const LoginPage = ({ onSignUp, onLogin }) => {
             onChange={onChange}
             placeholder="id"
             autoFocus
+            autoComplete="off"
           />
         </InputBox>
         <InputBox>
@@ -42,6 +43,7 @@ const LoginPage = ({ onSignUp, onLogin }) => {
             type="text"
             onChange={onChange}
             placeholder="pw"
+            autoComplete="off"
           />
         </InputBox>
         <Button onClick={signupHandler}>가입</Button>
