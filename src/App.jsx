@@ -1,78 +1,64 @@
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Route, Routes } from "react-router-dom";
 import styled from "styled-components";
+import { CardContext } from "./contexts/CardContext";
 import LearnPage from "./pages/LearnPage";
 import ListPage from "./pages/ListPage";
-import * as cardProvider from "./service/cardService";
 
 function App() {
   const [cards, setCards] = useState([]);
+  const cardService = useContext(CardContext);
 
   useEffect(async () => {
-    const cards = await cardProvider.getCard();
+    const cards = await cardService.getCard();
     setCards(cards);
   }, []);
 
-  const indexRef = useRef(11);
-
-  const onChangeLevel = async (id) => {
-    const updatedCard = await cardProvider.changeLevel(id);
-    if (!updatedCard) {
-      return;
-    }
-
-    setCards((prevCards) => {
-      const cards = prevCards.map((card) => {
-        if (card.id === updatedCard.id) {
-          return updatedCard;
-        }
-        return card;
-      });
-      return cards;
-    });
-  };
-
   const onCreateCard = async (card) => {
-    const newCard = {
-      id: indexRef.current,
-      user_id: 1,
-      ...card,
-      level: "어려워요",
-      create_at: Date.now(),
-    };
-
-    const response = await cardProvider.createCard(newCard); //
-    if (response === null) {
+    const data = await cardService.createCard(card);
+    if (data === null) {
       throw new Error("Create fail");
     }
 
-    setCards(response);
-    indexRef.current += 1;
+    setCards((prevState) => {
+      const Cards = [data, ...prevState];
+      return Cards;
+    });
   };
 
   const onRemoveCard = async (id) => {
-    const response = await cardProvider.removeCard(id);
+    const data = await cardService.removeCard(id);
 
-    if (!response) {
-      console.log(response);
+    if (!data) {
+      console.log(data);
       return;
     }
 
-    setCards(response);
+    setCards((prevState) => {
+      const Cards = prevState.filter((card) => card.id !== data.id);
+      return Cards;
+    });
   };
 
   const onEditCard = async (card) => {
-    const response = await cardProvider.updateCard(card);
+    const response = await cardService.updateCard(card);
 
     setCards((prevCards) => {
       const cards = prevCards.map((item) => {
         if (item.id === response.id) {
           return response;
+        } else {
+          return item;
         }
-        return item;
       });
       return cards;
     });
+  };
+
+  const onChangeGroup = async (groupName) => {
+    const response = await cardService.getCard(groupName);
+
+    setCards(response);
   };
 
   return (
@@ -86,7 +72,7 @@ function App() {
               onCreateCard={onCreateCard}
               onRemoveCard={onRemoveCard}
               onEditCard={onEditCard}
-              onChangeLevel={onChangeLevel}
+              onChangeGroup={onChangeGroup}
             />
           }
         />

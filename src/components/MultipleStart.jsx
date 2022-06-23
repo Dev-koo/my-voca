@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import styled from "styled-components";
 import { MdOutlineArrowBackIos } from "react-icons/md";
 import { GiSpeaker } from "react-icons/gi";
-import * as cardProvider from "../service/cardService";
 import ResultPanel from "./ResultPanel";
 import { useAudio } from "../contexts/AudioContext";
+import { CardContext } from "../contexts/CardContext";
 
 function randomArray(cards, showCard) {
   //   console.log(`show card = ${showCard.id} : ${showCard.word}`);
@@ -38,10 +38,12 @@ const MultipleStart = ({ cardCount, selectedGroup, showMultiplePanel }) => {
 
   const onPlay = useAudio();
 
+  const cardService = useContext(CardContext);
   useEffect(async () => {
-    await cardProvider
+    await cardService
       .getRandomCard() //
       .then((response) => {
+        console.log(response);
         const learnCards = response.slice(0, cardCount);
         setCards(learnCards); // 학습할 카드가 담긴 state (slice 된 상태)
         setShowCard(learnCards[cardIndex]); // 보여지는 카드

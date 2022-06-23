@@ -3,57 +3,61 @@ import styled from "styled-components";
 import { MdOutlineArrowBackIos, MdSearch } from "react-icons/md";
 import GroupItem from "./GroupItem";
 import AddButton from "./AddButton";
-import * as groupProvider from "../service/groupService";
 import AddGroupPanel from "./AddGroupPanel";
 import GroupEditPanel from "./GroupEditPanel";
+import { useGorupService } from "../contexts/GroupContext";
 
-const GroupPanel = ({ showGroupPanel, onSelectGroup, flag, editPanel }) => {
+const GroupPanel = ({
+  showGroupPanel,
+  onSelectGroup,
+  flag,
+  editPanel,
+  onChangeGroup,
+}) => {
   const [groups, setGroups] = useState([]);
   const [selectedGroup, setSelectedGroup] = useState([]);
 
   const [showAddGroup, setShowAddGroup] = useState(false);
 
-  useEffect(async () => {
-    const data = await groupProvider.getGroups();
+  const groupService = useGorupService();
 
+  useEffect(async () => {
+    const data = await groupService.getGroups();
     if (flag === "hidden") {
-      setGroups(data.groupsHidden);
+      setGroups(data.filter((card) => card.group_name !== "모든 그룹"));
     } else {
-      setGroups(data.groups);
+      setGroups(data);
     }
-  }, [groups]);
+  }, []);
 
   const onRemoveGroup = async () => {
     if (selectedGroup.length > 1) {
       console.log("하나만 선택해 주세요");
       return;
     }
-    const index = selectedGroup.at(0).id;
-    const response = await groupProvider.remove(index);
+    const targetGroupName = selectedGroup.at(0).group_name;
+    const response = await groupService.remove(selectedGroup.at(0).group_id);
     if (!response) {
       throw new Error("Group Create Error");
     }
     setGroups((prevState) => {
-      const groups = prevState.filter((group) => group.id !== index);
+      const groups = prevState.filter(
+        (group) => group.group_name !== targetGroupName
+      );
       return groups;
     });
+    setSelectedGroup([]);
+    onChangeGroup();
   };
 
   const onAddGroup = async (name) => {
-    const group = {
-      group_name: name,
-      user_id: 1,
-      create_at: Date.now(),
-      count: 0,
-    };
-    const response = await groupProvider.create(group);
+    const response = await groupService.create({ group_name: name });
     if (!response) {
       throw new Error("Group Create Error");
     }
-    setGroups((prevState) => {
-      const groups = [...prevState, response];
-      return groups;
-    });
+
+    const data = await groupService.getGroups();
+    setGroups(data);
   };
 
   const appendGroup = (group) => {
@@ -65,7 +69,9 @@ const GroupPanel = ({ showGroupPanel, onSelectGroup, flag, editPanel }) => {
 
   const removeSelectGroup = (group) => {
     setSelectedGroup((prevState) => {
-      const updatedGroup = prevState.filter((item) => item.id !== group.id);
+      const updatedGroup = prevState.filter(
+        (item) => item.group_id !== group.group_id
+      );
       return updatedGroup;
     });
   };
@@ -108,14 +114,13 @@ const GroupPanel = ({ showGroupPanel, onSelectGroup, flag, editPanel }) => {
             <ResetButton>취소</ResetButton>
           </SearchGroup>
           <GroupList>
-            {groups &&
-              groups.map((group) => (
-                <GroupItem
-                  key={group.id}
-                  group={group}
-                  handleSelecetdGroups={handleSelecetdGroups}
-                />
-              ))}
+            {groups.map((group) => (
+              <GroupItem
+                key={group.group_name}
+                group={group}
+                handleSelecetdGroups={handleSelecetdGroups}
+              />
+            ))}
           </GroupList>
           <AddButton showAddPanel={onShowAddGroup} />
         </Contents>

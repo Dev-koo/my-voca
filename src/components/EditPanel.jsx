@@ -25,8 +25,8 @@ const EditPanel = ({
   };
 
   const onSelectGroup = (group) => {
-    const { group_name } = group;
-    handleEditCard({ group_name });
+    const { group_name, group_id } = group;
+    handleEditCard({ group_name, group_id });
   };
 
   const handleEditCard = (card) => {
@@ -34,7 +34,6 @@ const EditPanel = ({
       ...selectedCard,
       ...card,
     };
-
     onEditCard(newCard);
     showEditPanel();
   };

@@ -17,7 +17,7 @@ const ListPage = ({
   onCreateCard,
   onRemoveCard,
   onEditCard,
-  onChangeLevel,
+  onChangeGroup,
 }) => {
   const [selectedCard, setSelectedCard] = useState(null);
 
@@ -37,6 +37,7 @@ const ListPage = ({
   };
 
   const onSelectGroup = (group) => {
+    onChangeGroup(group.group_name);
     setSelectedGroups(group.group_name);
   };
 
@@ -76,7 +77,7 @@ const ListPage = ({
             <CardItem
               key={card.id}
               card={card}
-              onChangeLevel={onChangeLevel}
+              onEditCard={onEditCard}
               showEditPanel={showEditPanel}
               onSelectCard={onSelectCard}
             />
@@ -116,6 +117,7 @@ const ListPage = ({
           onSelectGroup={onSelectGroup}
           flag=""
           editPanel="true"
+          onChangeGroup={onChangeGroup}
         />
       ) : null}
     </>

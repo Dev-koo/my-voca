@@ -2,10 +2,13 @@ import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import { MdOutlineArrowBackIos } from "react-icons/md";
 import GroupPanel from "./GroupPanel";
-import * as groupProvider from "../service/groupService";
+import { useGorupService } from "../contexts/GroupContext";
 
 const AddCardPanel = ({ showAddPanel, onCreateCard, selectedGroups, card }) => {
-  const [selectedGroup, setSelectedGroup] = useState();
+  const [selectedGroup, setSelectedGroup] = useState({
+    group_name: null,
+    group_id: null,
+  });
 
   const [showGroup, setShowGroup] = useState(false);
 
@@ -14,13 +17,31 @@ const AddCardPanel = ({ showAddPanel, onCreateCard, selectedGroups, card }) => {
   const meanRef = useRef();
   const memoRef = useRef();
 
+  const groupService = useGorupService();
+
   useEffect(async () => {
     if (selectedGroups === "모든 그룹") {
-      const data = await groupProvider.getGroups();
-      setSelectedGroup(data.groupsHidden.at(1).group_name);
+      const data = (await groupService.getGroups()).filter(
+        (card) => card.group_name !== "모든 그룹"
+      );
+      data &&
+        setSelectedGroup({
+          group_name: data.at(1).group_name,
+          group_id: data.at(1).group_id,
+        });
+
       return;
+    } else {
+      const data = (await groupService.getGroups()).find(
+        (card) => card.group_name === selectedGroups
+      );
+
+      data &&
+        setSelectedGroup({
+          group_name: data.group_name,
+          group_id: data.group_id,
+        });
     }
-    setSelectedGroup(selectedGroups);
   }, []);
 
   useEffect(() => {
@@ -39,27 +60,31 @@ const AddCardPanel = ({ showAddPanel, onCreateCard, selectedGroups, card }) => {
     const word = wordRef.current.value;
     const mean = meanRef.current.value;
     const memo = memoRef.current.value;
-    const group_name = selectedGroup;
+    const group_name = selectedGroup.group_name;
+    const group_id = selectedGroup.group_id;
+    const level = card && card.level;
 
-    const card = {
+    const createdCard = {
       word, // primary
       mean, // primary
       memo: memo || null, // optional
-      group_name, // primary
+      group_name, // optional
+      group_id, // optional
+      level: level || null,
     };
 
     if (!word || !mean) {
       return;
     }
 
-    onCreateCard(card);
+    onCreateCard(createdCard);
 
     formRef.current.reset();
     wordRef.current.focus();
   };
 
-  const onSelectGroup = (group) => {
-    setSelectedGroup(group.group_name);
+  const onSelectGroup = ({ group_name, group_id }) => {
+    setSelectedGroup({ group_name, group_id });
   };
 
   const handleShowGroupPanel = () => {
@@ -99,7 +124,7 @@ const AddCardPanel = ({ showAddPanel, onCreateCard, selectedGroups, card }) => {
               <Input ref={memoRef} type="text" placeholder="메모 (옵션)" />
             </InputBox>
             <SelectGroup onClick={handleShowGroupPanel}>
-              &gt; {selectedGroup || "그룹 없음"}
+              &gt; {selectedGroup.group_name || "그룹 없음"}
             </SelectGroup>
           </CardForm>
         </Contents>

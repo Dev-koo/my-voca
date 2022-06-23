@@ -10,10 +10,16 @@ import AuthContext from "./contexts/AuthContext.jsx";
 import AuthService from "./service/authService.js";
 import TokenStorage from "./common/js/tokenStorage.js";
 import HttpClient from "./common/js/http.js";
+import CardsService from "./service/cardService.js";
+import { CardContext } from "./contexts/CardContext.js";
+import { GroupProvider } from "./contexts/GroupContext.js";
+import GroupService from "./service/groupService.js";
 
 const httpClient = new HttpClient(process.env.REACT_APP_BASE_URL);
 const tokenStorage = new TokenStorage();
 const authService = new AuthService(httpClient, tokenStorage);
+const cardService = new CardsService(httpClient, tokenStorage);
+const groupService = new GroupService(httpClient, tokenStorage);
 
 ReactDOM.render(
   <React.StrictMode>
@@ -21,9 +27,13 @@ ReactDOM.render(
       <ThemeProvider theme={theme}>
         <Globalstyle />
         <AuthContext authService={authService} tokenStorage={tokenStorage}>
-          <AudioProvider>
-            <App />
-          </AudioProvider>
+          <CardContext.Provider value={cardService}>
+            <GroupProvider groupService={groupService}>
+              <AudioProvider>
+                <App />
+              </AudioProvider>
+            </GroupProvider>
+          </CardContext.Provider>
         </AuthContext>
       </ThemeProvider>
     </BrowserRouter>

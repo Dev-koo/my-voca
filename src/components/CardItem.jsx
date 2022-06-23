@@ -4,11 +4,32 @@ import { GiSpeaker } from "react-icons/gi";
 import { useLongPress } from "use-long-press";
 import { useAudio } from "../contexts/AudioContext";
 
-const CardItem = ({ card, onChangeLevel, showEditPanel, onSelectCard }) => {
+function getLevel(level) {
+  switch (level) {
+    case "어려워요":
+      return "애매해요";
+    case "애매해요":
+      return "외웠어요";
+    case "외웠어요":
+      return "어려워요";
+    default:
+      break;
+  }
+}
+
+const CardItem = ({ card, onEditCard, showEditPanel, onSelectCard }) => {
   const [toggle, setToggle] = useState(false);
   const onPlay = useAudio();
 
-  const { id, word, mean, memo, level, group_name } = card;
+  const { word, mean, memo, level, group_name } = card;
+
+  const handleChangeLevel = () => {
+    const newCard = {
+      ...card,
+      level: getLevel(level),
+    };
+    onEditCard(newCard);
+  };
 
   const onToggle = (event) => {
     if (event.target.id === "level") {
@@ -43,11 +64,7 @@ const CardItem = ({ card, onChangeLevel, showEditPanel, onSelectCard }) => {
         {toggle && memo ? <Memo>{memo}</Memo> : null}
       </Middle>
       <Bottom>
-        <DisplayLavel
-          onClick={() => onChangeLevel(id)}
-          level={level}
-          id="level"
-        >
+        <DisplayLavel onClick={handleChangeLevel} level={level} id="level">
           {level}
         </DisplayLavel>
       </Bottom>
