@@ -1,4 +1,5 @@
 import React, { useState, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { useAuth } from "../contexts/AuthContext";
 import CsvListPanel from "./CsvListPanel";
@@ -30,6 +31,7 @@ const MenuPanel = ({ csvService, showMenuPanel, onCsvLoad }) => {
   const readFile = () => {
     fileInputRef.current.click();
   };
+  const navigator = useNavigate();
 
   const handleClick = (event) => {
     if (event.target.id === "cancel" || event.target.id === "background") {
@@ -59,7 +61,7 @@ const MenuPanel = ({ csvService, showMenuPanel, onCsvLoad }) => {
         </form>
         <Panel>
           <ButtonGroup>
-            <Button>목록 편집</Button>
+            <Button onClick={() => navigator("/edit")}>목록 편집</Button>
             <Button onClick={readFile}>CSV 불러오기</Button>
             <Button>CSV 내보내기</Button>
             <Button onClick={onLogout}>로그아웃</Button>
