@@ -1,6 +1,7 @@
 import { useContext, useEffect, useState } from "react";
 import { Route, Routes } from "react-router-dom";
 import styled from "styled-components";
+import CardListEditPage from "./components/CardListEditPage";
 import { CardContext } from "./contexts/CardContext";
 import LearnPage from "./pages/LearnPage";
 import ListPage from "./pages/ListPage";
@@ -77,6 +78,17 @@ function App() {
           }
         />
         <Route path="/learn" element={<LearnPage cards={cards} />} />
+        <Route
+          path="/edit"
+          element={
+            <CardListEditPage
+              cards={cards}
+              onRemoveCard={onRemoveCard}
+              onEditCard={onEditCard}
+              onChangeGroup={onChangeGroup}
+            />
+          }
+        />
       </Routes>
     </AppContent>
   );

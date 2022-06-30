@@ -1,8 +1,11 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { useAuth } from "../contexts/AuthContext";
 const MenuPanel = ({ showMenuPanel }) => {
   const onLogout = useAuth();
+  const navigator = useNavigate();
+
   const handleClick = (event) => {
     if (event.target.id === "cancel" || event.target.id === "background") {
       showMenuPanel();
@@ -12,7 +15,7 @@ const MenuPanel = ({ showMenuPanel }) => {
     <BackGround id="background" onClick={handleClick}>
       <Panel>
         <ButtonGroup>
-          <Button>목록 편집</Button>
+          <Button onClick={() => navigator("/edit")}>목록 편집</Button>
           <Button>CSV 불러오기</Button>
           <Button>CSV 내보내기</Button>
           <Button onClick={onLogout}>로그아웃</Button>
