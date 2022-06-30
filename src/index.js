@@ -1,4 +1,4 @@
-import React from "react";
+import React, { createContext, useContext } from "react";
 import ReactDOM from "react-dom";
 import App from "./App.jsx";
 import { BrowserRouter } from "react-router-dom";
@@ -14,12 +14,14 @@ import CardsService from "./service/cardService.js";
 import { CardContext } from "./contexts/CardContext.js";
 import { GroupProvider } from "./contexts/GroupContext.js";
 import GroupService from "./service/groupService.js";
+import CsvService from "./service/csvService.js";
 
 const httpClient = new HttpClient(process.env.REACT_APP_BASE_URL);
 const tokenStorage = new TokenStorage();
 const authService = new AuthService(httpClient, tokenStorage);
 const cardService = new CardsService(httpClient, tokenStorage);
 const groupService = new GroupService(httpClient, tokenStorage);
+const csvService = new CsvService(httpClient, tokenStorage);
 
 ReactDOM.render(
   <React.StrictMode>
@@ -30,7 +32,7 @@ ReactDOM.render(
           <CardContext.Provider value={cardService}>
             <GroupProvider groupService={groupService}>
               <AudioProvider>
-                <App />
+                <App csvService={csvService} />
               </AudioProvider>
             </GroupProvider>
           </CardContext.Provider>

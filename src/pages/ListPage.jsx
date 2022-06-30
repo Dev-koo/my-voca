@@ -18,6 +18,8 @@ const ListPage = ({
   onRemoveCard,
   onEditCard,
   onChangeGroup,
+  csvService,
+  onCsvLoad,
 }) => {
   const [selectedCard, setSelectedCard] = useState(null);
 
@@ -93,7 +95,13 @@ const ListPage = ({
         </Link>
       </NavBar>
       <AddButton showAddPanel={showAddPanel} />
-      {showMenu ? <MenuPanel showMenuPanel={showMenuPanel} /> : null}
+      {showMenu ? (
+        <MenuPanel
+          csvService={csvService}
+          showMenuPanel={showMenuPanel}
+          onCsvLoad={onCsvLoad}
+        />
+      ) : null}
       {showEdit ? (
         <EditPanel
           selectedCard={selectedCard}

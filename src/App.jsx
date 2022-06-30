@@ -5,7 +5,7 @@ import { CardContext } from "./contexts/CardContext";
 import LearnPage from "./pages/LearnPage";
 import ListPage from "./pages/ListPage";
 
-function App() {
+function App({ csvService }) {
   const [cards, setCards] = useState([]);
   const cardService = useContext(CardContext);
 
@@ -13,6 +13,13 @@ function App() {
     const cards = await cardService.getCard();
     setCards(cards);
   }, []);
+
+  const onCsvLoad = (cards) => {
+    setCards((prevState) => {
+      const Cards = [...cards, ...prevState];
+      return Cards;
+    });
+  };
 
   const onCreateCard = async (card) => {
     const data = await cardService.createCard(card);
@@ -73,6 +80,8 @@ function App() {
               onRemoveCard={onRemoveCard}
               onEditCard={onEditCard}
               onChangeGroup={onChangeGroup}
+              csvService={csvService}
+              onCsvLoad={onCsvLoad}
             />
           }
         />

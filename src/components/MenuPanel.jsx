@@ -1,25 +1,80 @@
-import React from "react";
+import React, { useState, useRef } from "react";
 import styled from "styled-components";
 import { useAuth } from "../contexts/AuthContext";
-const MenuPanel = ({ showMenuPanel }) => {
+import CsvListPanel from "./CsvListPanel";
+const MenuPanel = ({ csvService, showMenuPanel, onCsvLoad }) => {
+  const [showCsvPanel, setShowCsvPanel] = useState(false);
+  const [cards, setCards] = useState([]);
   const onLogout = useAuth();
+  const fileInputRef = useRef();
+
+  const onCsvSave = async (group_id) => {
+    const customCards = cards.map((card) => {
+      return {
+        ...card,
+        group_id,
+      };
+    });
+    const response = await csvService.save(customCards);
+    onCsvLoad(response);
+  };
+
+  const onFileUpload = async (event) => {
+    const file = event.currentTarget.files[0];
+    const cards = await csvService.upload(file);
+    setCards(cards);
+    fileInputRef.current.value = "";
+    showCsvListPanel();
+  };
+
+  const readFile = () => {
+    fileInputRef.current.click();
+  };
+
   const handleClick = (event) => {
     if (event.target.id === "cancel" || event.target.id === "background") {
       showMenuPanel();
     }
   };
+
+  const showCsvListPanel = () => {
+    setShowCsvPanel((bool) => {
+      if (!bool === false) {
+        setCards([]);
+        return !bool;
+      }
+      return !bool;
+    });
+  };
   return (
-    <BackGround id="background" onClick={handleClick}>
-      <Panel>
-        <ButtonGroup>
-          <Button>목록 편집</Button>
-          <Button>CSV 불러오기</Button>
-          <Button>CSV 내보내기</Button>
-          <Button onClick={onLogout}>로그아웃</Button>
-          <Button id="cancel">취소</Button>
-        </ButtonGroup>
-      </Panel>
-    </BackGround>
+    <>
+      <BackGround id="background" onClick={handleClick}>
+        <form>
+          <HiddenFileInput
+            ref={fileInputRef}
+            type="file"
+            onChange={onFileUpload}
+            accept=".csv"
+          />
+        </form>
+        <Panel>
+          <ButtonGroup>
+            <Button>목록 편집</Button>
+            <Button onClick={readFile}>CSV 불러오기</Button>
+            <Button>CSV 내보내기</Button>
+            <Button onClick={onLogout}>로그아웃</Button>
+            <Button id="cancel">취소</Button>
+          </ButtonGroup>
+        </Panel>
+      </BackGround>
+      {showCsvPanel ? (
+        <CsvListPanel
+          cards={cards}
+          showCsvListPanel={showCsvListPanel}
+          onCsvSave={onCsvSave}
+        />
+      ) : null}
+    </>
   );
 };
 
@@ -31,6 +86,10 @@ const BackGround = styled.div`
   width: 100%;
   height: 100%;
   background: rgba(0, 0, 0, 0.805);
+`;
+
+const HiddenFileInput = styled.input`
+  display: none;
 `;
 
 const Panel = styled.div`
