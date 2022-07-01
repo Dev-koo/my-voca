@@ -4,19 +4,16 @@ import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import CardList from "./CardList";
 import EditCardItem from "./EditCardItem";
+import GroupListPanel from "./GroupListPanel";
 import LevelSettingPanel from "./LevelSettingPanel";
 
-const CardListEditPage = ({
-  cards,
-  onRemoveCard,
-  onEditCard,
-  onChangeGroup,
-}) => {
+const CardListEditPage = ({ cards, onRemoveCard, onEditCard }) => {
   const navigator = useNavigate();
   const [checkItems, setCheckItems] = useState([]);
   const [cardChanged, setCardChanged] = useState([]);
 
   const [showLevelSettingPanel, setShowLevelSettingPanel] = useState(false);
+  const [showGroupListPanel, setShowGroupListPanel] = useState(false);
   const onChangeChecked = (id) => {
     if (checkItems.includes(id)) {
       setCheckItems((prevState) => {
@@ -62,8 +59,25 @@ const CardListEditPage = ({
     onShowLevelSettingPanel();
   };
 
+  const onGroupChange = () => {
+    let array = [];
+    checkItems.forEach((value) => {
+      cards.map((card) => {
+        if (card.id === value) {
+          array.push(card);
+        }
+      });
+    });
+
+    setCardChanged(array);
+    onShowGroupListPanel();
+  };
+
   const onShowLevelSettingPanel = () => {
     setShowLevelSettingPanel((bool) => !bool);
+  };
+  const onShowGroupListPanel = () => {
+    setShowGroupListPanel((bool) => !bool);
   };
 
   return (
@@ -96,7 +110,7 @@ const CardListEditPage = ({
       {checkItems.length ? (
         <CardListEditPanel>
           <EditButton onClick={onLevelChange}>레벨 편집</EditButton>
-          <EditButton>그룹 편집</EditButton>
+          <EditButton onClick={onGroupChange}>그룹 편집</EditButton>
           <EditButton onClick={onDelete}>삭제</EditButton>
         </CardListEditPanel>
       ) : null}
@@ -105,6 +119,13 @@ const CardListEditPage = ({
           cardChanged={cardChanged}
           onEditCard={onEditCard}
           onShowLevelSettingPanel={onShowLevelSettingPanel}
+        />
+      ) : null}
+      {showGroupListPanel ? (
+        <GroupListPanel
+          cardChanged={cardChanged}
+          onEditCard={onEditCard}
+          onShowGroupListPanel={onShowGroupListPanel}
         />
       ) : null}
     </>
