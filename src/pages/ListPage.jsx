@@ -14,6 +14,7 @@ import MenuPanel from "../components/MenuPanel";
 
 const ListPage = ({
   cards,
+  selectedGroups,
   onCreateCard,
   onRemoveCard,
   onEditCard,
@@ -22,8 +23,6 @@ const ListPage = ({
   onCsvLoad,
 }) => {
   const [selectedCard, setSelectedCard] = useState(null);
-
-  const [selectedGroups, setSelectedGroups] = useState("모든 그룹");
 
   const [showEdit, setShowEdit] = useState(false);
   const [showAdd, setShowAdd] = useState(false);
@@ -40,7 +39,6 @@ const ListPage = ({
 
   const onSelectGroup = (group) => {
     onChangeGroup(group.group_name);
-    setSelectedGroups(group.group_name);
   };
 
   const showEditPanel = () => {

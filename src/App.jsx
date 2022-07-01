@@ -8,6 +8,8 @@ import ListPage from "./pages/ListPage";
 
 function App({ csvService }) {
   const [cards, setCards] = useState([]);
+  const [selectedGroups, setSelectedGroups] = useState("모든 그룹");
+
   const cardService = useContext(CardContext);
 
   useEffect(async () => {
@@ -67,6 +69,7 @@ function App({ csvService }) {
     const response = await cardService.getCard(groupName);
 
     setCards(response);
+    setSelectedGroups(groupName);
   };
 
   return (
@@ -77,6 +80,7 @@ function App({ csvService }) {
           element={
             <ListPage
               cards={cards}
+              selectedGroups={selectedGroups}
               onCreateCard={onCreateCard}
               onRemoveCard={onRemoveCard}
               onEditCard={onEditCard}
