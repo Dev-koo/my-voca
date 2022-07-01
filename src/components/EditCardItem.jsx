@@ -91,6 +91,10 @@ export default EditCardItem;
 const CardWrapper = styled.li`
   display: flex;
   align-items: center;
+
+  &:last-child {
+    margin-bottom: 20rem;
+  }
 `;
 const CheckBox = styled.input`
   margin-right: 1rem;
