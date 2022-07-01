@@ -28,24 +28,22 @@ const GroupPanel = ({
     } else {
       setGroups(data);
     }
-  }, []);
+  }, [groups]);
 
   const onRemoveGroup = async () => {
-    if (selectedGroup.length > 1) {
-      console.log("하나만 선택해 주세요");
-      return;
-    }
-    const targetGroupName = selectedGroup.at(0).group_name;
-    const response = await groupService.remove(selectedGroup.at(0).group_id);
-    if (!response) {
-      throw new Error("Group Create Error");
-    }
-    setGroups((prevState) => {
-      const groups = prevState.filter(
-        (group) => group.group_name !== targetGroupName
-      );
-      return groups;
+    selectedGroup.map(async (group) => {
+      const response = await groupService.remove(group.group_id);
+      if (!response) {
+        throw new Error("Group Create Error");
+      }
+      setGroups((prevState) => {
+        const groups = prevState.filter(
+          (item) => item.group_name !== group.group_name
+        );
+        return groups;
+      });
     });
+
     setSelectedGroup([]);
     onChangeGroup();
   };

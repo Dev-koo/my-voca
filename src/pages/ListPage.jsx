@@ -64,7 +64,7 @@ const ListPage = ({
           <MdMenu />
         </Button>
         <Title onClick={showGroupPanel}>
-          {selectedGroups}
+          {selectedGroups || "모든 그룹"}
           <MdKeyboardArrowDown />
         </Title>
         <Button>
