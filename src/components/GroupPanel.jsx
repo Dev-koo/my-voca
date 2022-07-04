@@ -28,7 +28,7 @@ const GroupPanel = ({
     } else {
       setGroups(data);
     }
-  }, [groups]);
+  }, []);
 
   const onRemoveGroup = async () => {
     selectedGroup.map(async (group) => {
