@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { GiSpeaker } from "react-icons/gi";
 import { useLongPress } from "use-long-press";
 import { useAudio } from "../contexts/AudioContext";
+import { useEffect } from "react";
 
 function getLevel(level) {
   switch (level) {
@@ -19,16 +20,23 @@ function getLevel(level) {
 
 const CardItem = ({ card, onEditCard, showEditPanel, onSelectCard }) => {
   const [toggle, setToggle] = useState(false);
+  const [displayLevel, setDisplayLevel] = useState("");
+  const { word, mean, memo, level, group_name } = card;
   const onPlay = useAudio();
 
-  const { word, mean, memo, level, group_name } = card;
+  useEffect(() => {
+    setDisplayLevel(level);
+  }, []);
 
   const handleChangeLevel = () => {
+    const l = getLevel(displayLevel);
+
     const newCard = {
       ...card,
-      level: getLevel(level),
+      level: l,
     };
     onEditCard(newCard);
+    setDisplayLevel(l);
   };
 
   const onToggle = (event) => {
@@ -64,8 +72,12 @@ const CardItem = ({ card, onEditCard, showEditPanel, onSelectCard }) => {
         {toggle && memo ? <Memo>{memo}</Memo> : null}
       </Middle>
       <Bottom>
-        <DisplayLavel onClick={handleChangeLevel} level={level} id="level">
-          {level}
+        <DisplayLavel
+          onClick={handleChangeLevel}
+          level={displayLevel}
+          id="level"
+        >
+          {displayLevel}
         </DisplayLavel>
       </Bottom>
     </Card>
