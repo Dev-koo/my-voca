@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState, useCallback } from "react";
 import { Route, Routes } from "react-router-dom";
 import styled from "styled-components";
 import CardListEditPage from "./components/CardListEditPage";
@@ -50,7 +50,7 @@ function App({ csvService }) {
     });
   };
 
-  const onEditCard = async (card) => {
+  const onEditCard = useCallback(async (card) => {
     const response = await cardService.updateCard(card);
 
     setCards((prevCards) => {
@@ -63,7 +63,7 @@ function App({ csvService }) {
       });
       return cards;
     });
-  };
+  }, []);
 
   const onChangeGroup = async (groupName) => {
     const response = await cardService.getCard(groupName);

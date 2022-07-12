@@ -1,5 +1,4 @@
-import React from "react";
-import { useState } from "react";
+import React, { useCallback, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import CardList from "./CardList";
@@ -14,19 +13,15 @@ const CardListEditPage = ({ cards, onRemoveCard, onEditCard }) => {
 
   const [showLevelSettingPanel, setShowLevelSettingPanel] = useState(false);
   const [showGroupListPanel, setShowGroupListPanel] = useState(false);
-  const onChangeChecked = (id) => {
-    if (checkItems.includes(id)) {
-      setCheckItems((prevState) => {
-        const checkList = prevState.filter((innerId) => innerId !== id);
-        return checkList;
-      });
-    } else {
-      setCheckItems((prevState) => {
-        const checkList = [...prevState, id];
-        return checkList;
-      });
-    }
-  };
+  const onChangeChecked = useCallback((id) => {
+    setCheckItems((checkItems) => {
+      if (checkItems.includes(id)) {
+        return checkItems.filter((i) => i !== id);
+      } else {
+        return checkItems.concat(id);
+      }
+    });
+  }, []);
 
   const onSelectAll = () => {
     const checkItems = cards.map((card) => {

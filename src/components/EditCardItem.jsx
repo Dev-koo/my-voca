@@ -86,7 +86,7 @@ const EditCardItem = ({
   );
 };
 
-export default EditCardItem;
+export default React.memo(EditCardItem);
 
 const CardWrapper = styled.li`
   display: flex;

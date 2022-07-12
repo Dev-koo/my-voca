@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import { MdMenu, MdSearch, MdKeyboardArrowDown } from "react-icons/md";
@@ -29,21 +29,21 @@ const ListPage = ({
   const [showGroup, setShowGroup] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
 
-  const onSelectCard = (card) => {
+  const onSelectCard = useCallback((card) => {
     if (!card) {
       setSelectedCard(null);
       return;
     }
     setSelectedCard(card);
-  };
+  }, []);
 
   const onSelectGroup = (group) => {
     onChangeGroup(group.group_name);
   };
 
-  const showEditPanel = () => {
+  const showEditPanel = useCallback(() => {
     setShowEdit((bool) => !bool);
-  };
+  }, []);
 
   const showAddPanel = () => {
     setShowAdd((bool) => !bool);
@@ -130,7 +130,7 @@ const ListPage = ({
   );
 };
 
-export default ListPage;
+export default React.memo(ListPage);
 
 const Header = styled.header`
   display: flex;

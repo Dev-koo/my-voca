@@ -1,9 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { GiSpeaker } from "react-icons/gi";
 import { useLongPress } from "use-long-press";
 import { useAudio } from "../contexts/AudioContext";
-import { useEffect } from "react";
 
 function getLevel(level) {
   switch (level) {
@@ -84,7 +83,7 @@ const CardItem = ({ card, onEditCard, showEditPanel, onSelectCard }) => {
   );
 };
 
-export default CardItem;
+export default React.memo(CardItem);
 
 const Card = styled.div`
   width: 100%;
