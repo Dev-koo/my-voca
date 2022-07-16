@@ -1,22 +1,21 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-const LevelSettingPanel = ({
-  cardChanged,
-  onEditCard,
+const LevelChoice = ({
+  onSelectLevel,
+  selectedPanel,
   onShowLevelSettingPanel,
 }) => {
   const handleClick = (event) => {
-    if (event.target.id === "cancel" || event.target.id === "background") {
+    if (event.target.id === "cancel") {
+      onSelectLevel(null);
+      onShowLevelSettingPanel();
+    } else if (event.target.id === "background") {
       onShowLevelSettingPanel();
     }
   };
 
   const handleLevelChanger = (level) => {
-    const newCards = cardChanged.map((card) => {
-      return { ...card, level };
-    });
-
-    newCards.map((card) => onEditCard(card));
+    onSelectLevel(level);
     onShowLevelSettingPanel();
   };
 
@@ -25,7 +24,7 @@ const LevelSettingPanel = ({
       <BackGround id="background" onClick={handleClick}>
         <Panel>
           <ButtonGroup>
-            <Content>레벨 편집</Content>
+            <Content>{selectedPanel}</Content>
             <Button
               onClick={(e) => handleLevelChanger(e.currentTarget.innerText)}
             >
@@ -41,7 +40,7 @@ const LevelSettingPanel = ({
             >
               외웠어요
             </Button>
-            <Button id="cancel">취소</Button>
+            <Button id="cancel">선택 안함</Button>
           </ButtonGroup>
         </Panel>
       </BackGround>
@@ -49,7 +48,7 @@ const LevelSettingPanel = ({
   );
 };
 
-export default LevelSettingPanel;
+export default LevelChoice;
 
 const BackGround = styled.div`
   position: fixed;

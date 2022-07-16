@@ -25,7 +25,12 @@ function randomArray(cards, showCard) {
   return answerArray;
 }
 
-const MultipleStart = ({ cardCount, selectedGroup, showMultiplePanel }) => {
+const MultipleStart = ({
+  cardCount,
+  selectedGroup,
+  excludeLevel,
+  showMultiplePanel,
+}) => {
   const [cards, setCards] = useState([]); // 학습할 카드가 담긴 state (slice 된 상태)
   const [randomChoice, setRandomChoice] = useState(cards); // 보기 버튼 관리 state
   const [showCard, setShowCard] = useState(null); // 보여지는 카드
@@ -47,8 +52,16 @@ const MultipleStart = ({ cardCount, selectedGroup, showMultiplePanel }) => {
     await cardService
       .getRandomCard(selectedGroup) //
       .then((response) => {
-        console.log(response);
-        const learnCards = response.slice(0, cardCount);
+        // console.log(response);
+        const learnCards = response.slice(0, cardCount).filter((item) => {
+          // if (excludeLevel === null) {
+          //   return item;
+          // }
+          if (item.level !== excludeLevel) {
+            return item;
+          }
+        });
+        console.log(learnCards);
         setCards(learnCards); // 학습할 카드가 담긴 state (slice 된 상태)
         setShowCard(learnCards[cardIndex]); // 보여지는 카드
         // 보기 버튼 관리 state (인덱스 0~4 까지 보여지고있다.)
@@ -141,7 +154,7 @@ const MultipleStart = ({ cardCount, selectedGroup, showMultiplePanel }) => {
           <Button onClick={showMultiplePanel}>
             <MdOutlineArrowBackIos />
           </Button>
-          <Title>{`${cardIndex + 1} of ${cardCount}`}</Title>
+          <Title>{`${cardIndex + 1} of ${cards.length}`}</Title>
           <Button onClick={playHandler}>
             <GiSpeaker />
           </Button>

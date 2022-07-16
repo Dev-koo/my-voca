@@ -7,15 +7,19 @@ import {
 import GroupPanel from "./GroupPanel";
 import InputPanel from "./InputPanel";
 import MultipleStart from "./MultipleStart";
+import LevelSettingPanel from "./LevelSettingPanel";
+import LevelChoice from "./LevelChoice";
 
 const MultipleChoice = ({ onShowMultiple }) => {
   const [selectedGroup, setSelectedGroup] = useState("그룹을 선택해 주세요");
   const [selectedPanel, setSelectedPanel] = useState("");
   const [cardCount, setCardCount] = useState(0);
+  const [excludeLevel, setExcludeLevel] = useState(null);
 
   const [showGroup, setShowGroup] = useState(false);
   const [showSetting, setShowSetting] = useState(false);
   const [showMultiple, setShowMultiple] = useState(false);
+  const [showLevel, setShowLevel] = useState(false);
 
   const [cards, setCards] = useState(null);
 
@@ -23,6 +27,10 @@ const MultipleChoice = ({ onShowMultiple }) => {
   //   const response = await cardProvider.getSlicedRandomCard(cardCount);
   //   setCards(response);
   // }, [cardCount]);
+
+  const onSelectLevel = (level) => {
+    setExcludeLevel(level);
+  };
 
   const onSelectGroup = async ({ group_name, count }) => {
     setSelectedGroup(group_name);
@@ -45,9 +53,15 @@ const MultipleChoice = ({ onShowMultiple }) => {
     setShowMultiple((bool) => !bool);
   };
 
+  const showLevelSettingPanel = () => {
+    setShowLevel((bool) => !bool);
+    const label = document.querySelector("#level").innerText;
+    setSelectedPanel(label);
+  };
+
   const showSettingPanel = () => {
     setShowSetting((bool) => !bool);
-    const label = document.querySelector(".label").innerText;
+    const label = document.querySelector("#count").innerText;
     setSelectedPanel(label);
   };
 
@@ -68,8 +82,17 @@ const MultipleChoice = ({ onShowMultiple }) => {
             <MdOutlineArrowForwardIos />
           </SettingItem>
           <SettingItem onClick={showSettingPanel}>
-            <Label className="label">문제 수</Label>
+            <Label className="label" id="count">
+              문제 수
+            </Label>
             <Value>{cardCount}</Value>
+            <MdOutlineArrowForwardIos />
+          </SettingItem>
+          <SettingItem onClick={showLevelSettingPanel}>
+            <Label className="label" id="level">
+              제외 레벨
+            </Label>
+            <Value>{excludeLevel ? excludeLevel : "없음"}</Value>
             <MdOutlineArrowForwardIos />
           </SettingItem>
         </SettingPanel>
@@ -94,7 +117,15 @@ const MultipleChoice = ({ onShowMultiple }) => {
         <MultipleStart
           cardCount={cardCount}
           selectedGroup={selectedGroup}
+          excludeLevel={excludeLevel}
           showMultiplePanel={showMultiplePanel}
+        />
+      ) : null}
+      {showLevel ? (
+        <LevelChoice
+          onSelectLevel={onSelectLevel}
+          selectedPanel={selectedPanel}
+          onShowLevelSettingPanel={showLevelSettingPanel}
         />
       ) : null}
     </Panel>
