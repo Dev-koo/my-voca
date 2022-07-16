@@ -45,7 +45,7 @@ const MultipleStart = ({ cardCount, selectedGroup, showMultiplePanel }) => {
   const cardService = useContext(CardContext);
   useEffect(async () => {
     await cardService
-      .getRandomCard() //
+      .getRandomCard(selectedGroup) //
       .then((response) => {
         console.log(response);
         const learnCards = response.slice(0, cardCount);

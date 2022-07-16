@@ -14,8 +14,9 @@ export default class CardsService {
   }
 
   // 랜덤정렬 모든 그룹 카드
-  async getRandomCard() {
-    return await this.http.fetch(`/cards/random`, {
+  async getRandomCard(groupName) {
+    const query = groupName ? `?groupname=${groupName}` : "";
+    return await this.http.fetch(`/cards/random${query}`, {
       method: "GET",
       headers: this.getHeader(),
     });

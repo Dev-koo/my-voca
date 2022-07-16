@@ -105,7 +105,7 @@ const CardList = styled.div`
   border-top-left-radius: 1.5rem;
   border-top-right-radius: 1.5rem;
   width: 100%;
-  height: 80%;
+  height: 75%;
   position: absolute;
   padding: 1rem;
   bottom: 0;
