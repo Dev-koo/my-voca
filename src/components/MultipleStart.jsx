@@ -5,6 +5,7 @@ import { GiSpeaker } from "react-icons/gi";
 import ResultPanel from "./ResultPanel";
 import { useAudio } from "../contexts/AudioContext";
 import { CardContext } from "../contexts/CardContext";
+import CorrectSign from "./CorrectSign";
 
 function randomArray(cards, showCard) {
   //   console.log(`show card = ${showCard.id} : ${showCard.word}`);
@@ -35,6 +36,9 @@ const MultipleStart = ({ cardCount, selectedGroup, showMultiplePanel }) => {
   const [allCards, setAllCards] = useState([]);
 
   const [showResult, setShowResult] = useState(false); // 결과 panel용 토글 state
+
+  const [isCorrect, setIsCorrect] = useState("right");
+  const [isVisible, setIsVisible] = useState(false);
 
   const onPlay = useAudio();
 
@@ -79,6 +83,7 @@ const MultipleStart = ({ cardCount, selectedGroup, showMultiplePanel }) => {
   const onAnswerCheck = (card) => {
     if (card.mean === showCard.mean) {
       console.log("정답");
+      setIsVisible((bool) => !bool);
       setResultCard((prevState) => {
         const resultCard = [...prevState];
         const newCard = resultCard.concat([{ ...showCard, correct: true }]);
@@ -92,9 +97,15 @@ const MultipleStart = ({ cardCount, selectedGroup, showMultiplePanel }) => {
         const allCards = prevState.filter((card) => card.id !== showCard.id);
         return allCards;
       });
+
+      setIsCorrect("right");
+      setTimeout(() => {
+        setIsVisible((bool) => !bool);
+      }, 550);
       next();
     } else {
       console.log("노답");
+      setIsVisible((bool) => !bool);
       setResultCard((prevState) => {
         const resultCard = [...prevState];
         const newCard = resultCard.concat([{ ...showCard, correct: false }]);
@@ -108,6 +119,10 @@ const MultipleStart = ({ cardCount, selectedGroup, showMultiplePanel }) => {
         const allCards = prevState.filter((card) => card.id !== showCard.id);
         return allCards;
       });
+      setIsCorrect("wrong");
+      setTimeout(() => {
+        setIsVisible((bool) => !bool);
+      }, 550);
       next();
     }
   };
@@ -134,7 +149,10 @@ const MultipleStart = ({ cardCount, selectedGroup, showMultiplePanel }) => {
         <Contents>
           {showCard && (
             <>
-              <Card>{showCard.word}</Card>
+              <Card>
+                {showCard.word}
+                <CorrectSign isCorrect={isCorrect} isVisible={isVisible} />
+              </Card>
               <Section>
                 <ChoiceButton onClick={() => onAnswerCheck(randomChoice.at(0))}>
                   {randomChoice.at(0)?.mean || ""}
@@ -198,6 +216,7 @@ const Contents = styled.section`
 `;
 
 const Card = styled.div`
+  position: relative;
   width: 100%;
   border-radius: 1rem;
   padding: 4rem 1rem;
