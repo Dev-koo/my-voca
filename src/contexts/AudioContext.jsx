@@ -14,24 +14,12 @@ const AudioPlayer = () => {
 };
 
 export const AudioProvider = ({ children }) => {
-  const onPlay = async (text) => {
-    const buffer = await audioService.getAudio(text);
-    const audioContext = getAudioContext();
-
-    // makeAudio(response)
-    const audioBuffer = await audioContext.decodeAudioData(buffer);
-
-    //create audio source
-    const source = audioContext.createBufferSource();
-    source.buffer = audioBuffer;
-    source.connect(audioContext.destination);
-    source.start();
+  const onPlay = (text) => {
+    audioService
+      .getAudio(text) //
+      .then((source) => source.start());
   };
 
-  const getAudioContext = () => {
-    const audioContent = new AudioContext();
-    return audioContent;
-  };
   return (
     <AudioPlayContext.Provider value={onPlay}>
       <AudioPlayer />
