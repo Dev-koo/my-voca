@@ -2,7 +2,6 @@ import { createContext, useContext } from "react";
 import AudioService from "../service/audioService";
 
 const AudioPlayContext = createContext();
-
 const audioService = new AudioService();
 
 const AudioPlayer = () => {
