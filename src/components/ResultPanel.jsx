@@ -87,7 +87,7 @@ const Title = styled.p`
 `;
 
 const ResultType = styled.div`
-  margin-top: 4rem;
+  /* margin-top: 4rem; */
   padding: 1rem 0;
   display: flex;
   color: white;
@@ -105,7 +105,7 @@ const CardList = styled.div`
   border-top-left-radius: 1.5rem;
   border-top-right-radius: 1.5rem;
   width: 100%;
-  height: 75%;
+  height: 85%;
   position: absolute;
   padding: 1rem;
   bottom: 0;
