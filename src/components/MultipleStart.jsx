@@ -5,9 +5,10 @@ import { GiSpeaker } from "react-icons/gi";
 import ResultPanel from "./ResultPanel";
 import { useAudio } from "../contexts/AudioContext";
 import { CardContext } from "../contexts/CardContext";
-import CorrectSign from "./CorrectSign";
+import { motion, useAnimationControls } from "framer-motion";
 
 function randomArray(cards, showCard) {
+  console.log(cards, showCard);
   //   console.log(`show card = ${showCard.id} : ${showCard.word}`);
   // 1. 랜덤으로 받은 모든카드중에 정답카드를 제외한다.
   const exceptCurrent = cards.filter((card) => card.id !== showCard.id);
@@ -42,12 +43,14 @@ const MultipleStart = ({
 
   const [showResult, setShowResult] = useState(false); // 결과 panel용 토글 state
 
-  const [isCorrect, setIsCorrect] = useState("right");
-  const [isVisible, setIsVisible] = useState(false);
+  const [isCorrect, setIsCorrect] = useState(false);
 
   const onPlay = useAudio();
 
   const cardService = useContext(CardContext);
+
+  const animationControler = useAnimationControls();
+
   useEffect(async () => {
     await cardService
       .getRandomCard(selectedGroup) //
@@ -96,13 +99,13 @@ const MultipleStart = ({
   const onAnswerCheck = (card) => {
     if (card.mean === showCard.mean) {
       console.log("정답");
-      setIsVisible((bool) => !bool);
       setResultCard((prevState) => {
         const resultCard = [...prevState];
         const newCard = resultCard.concat([{ ...showCard, correct: true }]);
         return newCard;
       });
       if (cardCount === cardIndex + 1) {
+        onShowCorrectSign();
         onShowResult();
         return;
       }
@@ -111,20 +114,18 @@ const MultipleStart = ({
         return allCards;
       });
 
-      setIsCorrect("right");
-      setTimeout(() => {
-        setIsVisible((bool) => !bool);
-      }, 550);
+      setIsCorrect(true);
+      onShowCorrectSign();
       next();
     } else {
       console.log("노답");
-      setIsVisible((bool) => !bool);
       setResultCard((prevState) => {
         const resultCard = [...prevState];
         const newCard = resultCard.concat([{ ...showCard, correct: false }]);
         return newCard;
       });
       if (cardCount === cardIndex + 1) {
+        onShowCorrectSign();
         onShowResult();
         return;
       }
@@ -132,10 +133,8 @@ const MultipleStart = ({
         const allCards = prevState.filter((card) => card.id !== showCard.id);
         return allCards;
       });
-      setIsCorrect("wrong");
-      setTimeout(() => {
-        setIsVisible((bool) => !bool);
-      }, 550);
+      setIsCorrect(false);
+      onShowCorrectSign();
       next();
     }
   };
@@ -146,6 +145,10 @@ const MultipleStart = ({
 
   const onShowResult = () => {
     setShowResult((bool) => !bool);
+  };
+
+  const onShowCorrectSign = () => {
+    animationControler.start({ opacity: [1, 0] });
   };
   return (
     <>
@@ -164,7 +167,15 @@ const MultipleStart = ({
             <>
               <Card>
                 {showCard.word}
-                <CorrectSign isCorrect={isCorrect} isVisible={isVisible} />
+                <SignPanel>
+                  <CorrectSign
+                    style={{ opacity: 0 }}
+                    animate={animationControler}
+                    iscorrect={isCorrect ? 1 : 0}
+                  >
+                    {isCorrect ? "정답" : "오답"}{" "}
+                  </CorrectSign>
+                </SignPanel>
               </Card>
               <Section>
                 <ChoiceButton onClick={() => onAnswerCheck(randomChoice.at(0))}>
@@ -238,6 +249,21 @@ const Card = styled.div`
   margin-bottom: 1rem;
   text-align: center;
   font-size: ${(props) => props.theme.sizes.xl4}; ;
+`;
+
+const SignPanel = styled.div`
+  position: absolute;
+  bottom: 1rem;
+  right: 50%;
+  transform: translateX(50%);
+  text-align: center;
+  font-size: 2rem;
+  z-index: 55;
+`;
+
+const CorrectSign = styled(motion.div)`
+  /* color: ${(props) => (props.isCorrect === "right" ? "skyblue" : "pink")}; */
+  color: ${(props) => (props.iscorrect ? "skyblue" : "pink")};
 `;
 
 const Section = styled.section`
