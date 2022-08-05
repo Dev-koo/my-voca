@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { MdOutlineArrowBackIos } from "react-icons/md";
 import GroupPanel from "./GroupPanel";
 import { useGorupService } from "../contexts/GroupContext";
+import { motion, useAnimationControls } from "framer-motion";
 
 const AddCardPanel = ({ showAddPanel, onCreateCard, selectedGroups, card }) => {
   const [selectedGroup, setSelectedGroup] = useState({
@@ -11,6 +12,10 @@ const AddCardPanel = ({ showAddPanel, onCreateCard, selectedGroups, card }) => {
   });
 
   const [showGroup, setShowGroup] = useState(false);
+  const [saveCheck, setSaveCheck] = useState({
+    isSaved: false,
+    message: "",
+  });
 
   const formRef = useRef();
   const wordRef = useRef();
@@ -18,6 +23,8 @@ const AddCardPanel = ({ showAddPanel, onCreateCard, selectedGroups, card }) => {
   const memoRef = useRef();
 
   const groupService = useGorupService();
+
+  const anumationController = useAnimationControls();
 
   useEffect(async () => {
     if (selectedGroups === "모든 그룹") {
@@ -56,7 +63,7 @@ const AddCardPanel = ({ showAddPanel, onCreateCard, selectedGroups, card }) => {
     }
   }, [card]);
 
-  const handleCreateCard = () => {
+  const handleCreateCard = async () => {
     const word = wordRef.current.value;
     const mean = meanRef.current.value;
     const memo = memoRef.current.value;
@@ -70,17 +77,34 @@ const AddCardPanel = ({ showAddPanel, onCreateCard, selectedGroups, card }) => {
       memo: memo || null, // optional
       group_name, // optional
       group_id, // optional
-      level: level || null,
+      level: level || null, // optional
     };
 
     if (!word || !mean) {
+      setSaveCheck({
+        flag: false,
+        message: "단어와 의미는 반드시 있어야 합니다.",
+      });
+      showSign();
       return;
     }
 
-    onCreateCard(createdCard);
+    const { flag } = await onCreateCard(createdCard);
+
+    if (flag === "success") {
+      setSaveCheck({ flag: true, message: "저장 되었습니다." });
+      showSign();
+    } else {
+      setSaveCheck({ flag: false, message: "저장 실패." });
+      showSign();
+    }
 
     formRef.current.reset();
     wordRef.current.focus();
+  };
+
+  const showSign = () => {
+    anumationController.start({ opacity: [1, 0] });
   };
 
   const onSelectGroup = ({ group_name, group_id }) => {
@@ -128,6 +152,15 @@ const AddCardPanel = ({ showAddPanel, onCreateCard, selectedGroups, card }) => {
             </SelectGroup>
           </CardForm>
         </Contents>
+        <SignPanel>
+          <Sign
+            style={{ opacity: 0 }}
+            animate={anumationController}
+            check={saveCheck.flag ? 1 : 0}
+          >
+            {saveCheck.message}
+          </Sign>
+        </SignPanel>
       </Panel>
       {showGroup ? (
         <GroupPanel
@@ -207,4 +240,18 @@ const Button = styled.button`
 
 const Title = styled.p`
   color: white;
+`;
+
+const SignPanel = styled.div`
+  position: absolute;
+  bottom: 50%;
+  right: 50%;
+  transform: translateX(50%);
+  text-align: center;
+  font-size: 2rem;
+  z-index: 55;
+`;
+
+const Sign = styled(motion.div)`
+  color: ${(props) => (props.check ? "skyblue" : "pink")};
 `;

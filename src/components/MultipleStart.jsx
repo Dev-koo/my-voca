@@ -8,8 +8,6 @@ import { CardContext } from "../contexts/CardContext";
 import { motion, useAnimationControls } from "framer-motion";
 
 function randomArray(cards, showCard) {
-  console.log(cards, showCard);
-  //   console.log(`show card = ${showCard.id} : ${showCard.word}`);
   // 1. 랜덤으로 받은 모든카드중에 정답카드를 제외한다.
   const exceptCurrent = cards.filter((card) => card.id !== showCard.id);
   // 2. 전체적으로 섞는다.
@@ -64,7 +62,6 @@ const MultipleStart = ({
             return item;
           }
         });
-        console.log(learnCards);
         setCards(learnCards); // 학습할 카드가 담긴 state (slice 된 상태)
         setShowCard(learnCards[cardIndex]); // 보여지는 카드
         // 보기 버튼 관리 state (인덱스 0~4 까지 보여지고있다.)

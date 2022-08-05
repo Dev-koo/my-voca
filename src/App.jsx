@@ -27,13 +27,15 @@ function App({ csvService }) {
   const onCreateCard = async (card) => {
     const data = await cardService.createCard(card);
     if (data === null) {
-      throw new Error("Create fail");
+      return { flag: "fail" };
     }
 
     setCards((prevState) => {
       const Cards = [data, ...prevState];
       return Cards;
     });
+
+    return { flag: "success" };
   };
 
   const onRemoveCard = async (id) => {
